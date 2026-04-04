@@ -1,0 +1,1875 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Skyline-Musik – Live-Band für jeden Anlass</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Syne:wght@400;500;600;700;800&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&display=swap" rel="stylesheet" />
+  <style>
+    /* ─── Reset & Base ───────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --white:   #FFFFFF;
+      --cream:   #FAF8F2;
+      --ink:     #111118;
+      --ink2:    #2C2C3A;
+      --yellow:  #F6E132;
+      --orange:  #FF6B47;
+      --blue:    #3ECFCF;
+      --gray:    #E8E6DF;
+      --gray2:   #A8A6A0;
+      --font-display: 'Bebas Neue', sans-serif;
+      --font-body:    'Syne', sans-serif;
+      --font-serif:   'Cormorant Garamond', serif;
+    }
+
+    html { scroll-behavior: smooth; overflow-x: hidden; }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--cream);
+      color: var(--ink);
+      overflow-x: hidden;
+    }
+
+    ::selection { background: var(--yellow); color: var(--ink); }
+
+    /* ─── Intro Overlay ──────────────────────────────────────────── */
+    #intro-overlay {
+      position: fixed; inset: 0; z-index: 9999;
+      background: var(--ink);
+      display: flex; align-items: center; justify-content: center;
+      flex-direction: column; gap: 2rem;
+      transition: opacity 0.8s ease, visibility 0.8s ease;
+    }
+
+    #intro-overlay.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+
+    .intro-logo {
+      font-family: var(--font-display);
+      font-size: clamp(3.5rem, 12vw, 9rem);
+      color: var(--white);
+      letter-spacing: 0.12em;
+      line-height: 0.9;
+      text-align: center;
+    }
+
+    .intro-logo span {
+      display: block;
+      color: var(--yellow);
+      font-size: 0.45em;
+      letter-spacing: 0.4em;
+      font-family: var(--font-body);
+      font-weight: 600;
+      margin-top: 0.6rem;
+    }
+
+    .intro-sub {
+      font-family: var(--font-body);
+      color: var(--gray2);
+      font-size: 0.95rem;
+      letter-spacing: 0.1em;
+    }
+
+    .intro-btn {
+      margin-top: 1rem;
+      padding: 1rem 3rem;
+      background: var(--yellow);
+      color: var(--ink);
+      border: none; cursor: pointer;
+      font-family: var(--font-body);
+      font-size: 0.9rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+      transition: background 0.2s, transform 0.2s;
+    }
+    .intro-btn:hover { background: var(--orange); transform: scale(1.03); }
+
+    .intro-vinyl {
+      width: 160px; height: 160px;
+      border-radius: 50%;
+      background: conic-gradient(
+        #222 0deg, #333 30deg, #222 60deg, #333 90deg,
+        #222 120deg, #333 150deg, #222 180deg, #333 210deg,
+        #222 240deg, #333 270deg, #222 300deg, #333 330deg, #222 360deg
+      );
+      box-shadow: 0 0 60px rgba(246,225,50,0.25);
+      animation: spin 4s linear infinite;
+      position: relative;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .intro-vinyl::after {
+      content: '';
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      background: var(--ink);
+      border: 3px solid #444;
+      position: absolute;
+      box-shadow: 0 0 0 2px var(--yellow);
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ─── Navigation ─────────────────────────────────────────────── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      padding: 1.2rem 5vw;
+      display: flex; align-items: center; justify-content: space-between;
+      transition: background 0.4s, box-shadow 0.4s;
+    }
+    nav.scrolled {
+      background: rgba(250,248,242,0.92);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 1px 0 rgba(0,0,0,0.08);
+    }
+
+    .nav-logo {
+      font-family: var(--font-display);
+      font-size: 1.7rem;
+      letter-spacing: 0.08em;
+      color: var(--ink);
+      text-decoration: none;
+    }
+    .nav-logo em { color: var(--orange); font-style: normal; }
+
+    .nav-links {
+      display: flex; gap: 2.4rem; list-style: none;
+    }
+    .nav-links a {
+      text-decoration: none;
+      color: var(--ink2);
+      font-size: 0.82rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      position: relative;
+      transition: color 0.2s;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute; bottom: -4px; left: 0; right: 100%;
+      height: 2px; background: var(--yellow);
+      transition: right 0.25s ease;
+    }
+    .nav-links a:hover { color: var(--ink); }
+    .nav-links a:hover::after { right: 0; }
+
+    .nav-book {
+      padding: 0.6rem 1.5rem;
+      background: var(--ink);
+      color: var(--yellow) !important;
+      font-weight: 700 !important;
+      letter-spacing: 0.1em !important;
+      clip-path: polygon(6px 0%, 100% 0%, calc(100% - 6px) 100%, 0% 100%);
+      transition: background 0.2s !important;
+    }
+    .nav-book:hover { background: var(--orange) !important; color: var(--white) !important; }
+    .nav-book::after { display: none !important; }
+
+    .hamburger {
+      display: none; flex-direction: column; gap: 5px;
+      cursor: pointer; background: none; border: none; padding: 4px;
+    }
+    .hamburger span {
+      display: block; width: 26px; height: 2px; background: var(--ink);
+      transition: transform 0.3s;
+    }
+
+    /* ─── Hero ───────────────────────────────────────────────────── */
+    #hero {
+      min-height: 100vh;
+      background: var(--cream);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      padding: 0 5vw;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-bg-shape {
+      position: absolute;
+      top: -10%; right: -5%;
+      width: 55vw; height: 105vh;
+      background: var(--yellow);
+      clip-path: polygon(15% 0%, 100% 0%, 100% 100%, 0% 100%);
+      z-index: 0;
+    }
+
+    .hero-bg-dots {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-image: radial-gradient(circle, rgba(17,17,24,0.07) 1px, transparent 1px);
+      background-size: 32px 32px;
+      z-index: 0;
+    }
+
+    .hero-left {
+      position: relative; z-index: 2;
+      padding: 120px 0 80px;
+    }
+
+    .hero-tag {
+      display: inline-flex; align-items: center; gap: 0.6rem;
+      background: var(--ink);
+      color: var(--yellow);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      padding: 0.45rem 1.1rem;
+      clip-path: polygon(6px 0%, 100% 0%, calc(100% - 6px) 100%, 0% 100%);
+      margin-bottom: 1.8rem;
+    }
+    .hero-tag::before {
+      content: '';
+      width: 6px; height: 6px;
+      background: var(--orange);
+      border-radius: 50%;
+      animation: pulse-dot 1.5s ease-in-out infinite;
+    }
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.6); }
+    }
+
+    .hero-title {
+      font-family: var(--font-display);
+      font-size: clamp(4.5rem, 9vw, 8.5rem);
+      line-height: 0.9;
+      letter-spacing: 0.04em;
+      color: var(--ink);
+      margin-bottom: 1.8rem;
+    }
+    .hero-title .line2 { color: var(--orange); display: block; }
+
+    .hero-desc {
+      font-family: var(--font-serif);
+      font-size: 1.2rem;
+      color: var(--ink2);
+      max-width: 420px;
+      line-height: 1.7;
+      margin-bottom: 2.5rem;
+    }
+
+    .hero-cta {
+      display: flex; gap: 1rem; flex-wrap: wrap;
+    }
+    .btn-primary {
+      padding: 1rem 2.5rem;
+      background: var(--ink);
+      color: var(--yellow);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.85rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+      transition: background 0.2s, transform 0.15s;
+      display: inline-flex; align-items: center; gap: 0.7rem;
+    }
+    .btn-primary:hover { background: var(--orange); transform: translateY(-2px); }
+
+    .btn-secondary {
+      padding: 1rem 2.5rem;
+      background: transparent;
+      color: var(--ink);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.85rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      border: 2px solid var(--ink);
+      clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+      transition: background 0.2s, color 0.2s, transform 0.15s;
+    }
+    .btn-secondary:hover { background: var(--ink); color: var(--white); transform: translateY(-2px); }
+
+    .hero-right {
+      position: relative; z-index: 2;
+      display: flex; align-items: center; justify-content: center;
+      padding: 120px 0 80px;
+    }
+
+    .vinyl-container {
+      position: relative;
+      width: clamp(260px, 32vw, 420px);
+      height: clamp(260px, 32vw, 420px);
+    }
+
+    .vinyl-record {
+      width: 100%; height: 100%;
+      border-radius: 50%;
+      background: conic-gradient(
+        #1a1a20 0deg, #26262e 20deg, #1a1a20 40deg, #26262e 60deg,
+        #1a1a20 80deg, #26262e 100deg, #1a1a20 120deg, #26262e 140deg,
+        #1a1a20 160deg, #26262e 180deg, #1a1a20 200deg, #26262e 220deg,
+        #1a1a20 240deg, #26262e 260deg, #1a1a20 280deg, #26262e 300deg,
+        #1a1a20 320deg, #26262e 340deg, #1a1a20 360deg
+      );
+      box-shadow:
+        0 30px 80px rgba(0,0,0,0.25),
+        0 0 0 2px rgba(246,225,50,0.4);
+      display: flex; align-items: center; justify-content: center;
+      animation: spin 8s linear infinite;
+      animation-play-state: paused;
+    }
+    .vinyl-record.playing { animation-play-state: running; }
+
+    .vinyl-record::before {
+      content: '';
+      position: absolute;
+      width: 65%; height: 65%;
+      border-radius: 50%;
+      background: conic-gradient(
+        #222 0deg, #2a2a30 15deg, #222 30deg, #2a2a30 45deg,
+        #222 60deg, #2a2a30 75deg, #222 90deg, #2a2a30 105deg,
+        #222 120deg, #2a2a30 135deg, #222 150deg, #2a2a30 165deg,
+        #222 180deg, #2a2a30 195deg, #222 210deg, #2a2a30 225deg,
+        #222 240deg, #2a2a30 255deg, #222 270deg, #2a2a30 285deg,
+        #222 300deg, #2a2a30 315deg, #222 330deg, #2a2a30 345deg, #222 360deg
+      );
+      box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+    }
+
+    .vinyl-center {
+      position: absolute;
+      width: 26%; height: 26%;
+      border-radius: 50%;
+      background: var(--yellow);
+      display: flex; align-items: center; justify-content: center;
+      z-index: 2;
+    }
+    .vinyl-center span {
+      font-family: var(--font-display);
+      font-size: 0.7em;
+      letter-spacing: 0.05em;
+      color: var(--ink);
+      transform: rotate(-10deg);
+      text-align: center;
+      line-height: 1.1;
+    }
+
+    .vinyl-play-btn {
+      position: absolute;
+      bottom: -18px; right: -18px;
+      width: 68px; height: 68px;
+      background: var(--orange);
+      border-radius: 50%;
+      border: none; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 8px 24px rgba(255,107,71,0.45);
+      transition: transform 0.2s, box-shadow 0.2s;
+      z-index: 3;
+    }
+    .vinyl-play-btn:hover { transform: scale(1.1); box-shadow: 0 12px 32px rgba(255,107,71,0.55); }
+    .vinyl-play-btn svg { margin-left: 3px; }
+
+    .hero-stats {
+      position: absolute;
+      bottom: -30px; left: -24px;
+      background: var(--white);
+      padding: 1.1rem 1.6rem;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+      display: flex; gap: 2rem;
+      clip-path: polygon(0 0, 100% 0, calc(100% - 8px) 100%, 8px 100%);
+      z-index: 3;
+    }
+    .stat { text-align: center; }
+    .stat-num {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      color: var(--ink);
+      letter-spacing: 0.03em;
+      display: block;
+    }
+    .stat-label {
+      font-size: 0.65rem;
+      color: var(--gray2);
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .scroll-hint {
+      position: absolute; bottom: 2.5rem; left: 50%;
+      transform: translateX(-50%);
+      z-index: 2;
+      display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+    }
+    .scroll-hint span {
+      font-size: 0.65rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--ink2);
+      font-weight: 600;
+    }
+    .scroll-line {
+      width: 1px; height: 48px;
+      background: linear-gradient(to bottom, var(--ink), transparent);
+      animation: scroll-drop 1.8s ease-in-out infinite;
+    }
+    @keyframes scroll-drop {
+      0% { transform: scaleY(0); transform-origin: top; }
+      50% { transform: scaleY(1); transform-origin: top; }
+      51% { transform: scaleY(1); transform-origin: bottom; }
+      100% { transform: scaleY(0); transform-origin: bottom; }
+    }
+
+    /* ─── Section Shared ─────────────────────────────────────────── */
+    section { padding: 7rem 5vw; }
+
+    .section-tag {
+      display: inline-flex; align-items: center; gap: 0.6rem;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 1rem;
+    }
+    .section-tag::before {
+      content: '';
+      display: block;
+      width: 28px; height: 2px;
+      background: var(--orange);
+    }
+
+    .section-title {
+      font-family: var(--font-display);
+      font-size: clamp(3rem, 6vw, 5.5rem);
+      letter-spacing: 0.04em;
+      line-height: 0.92;
+      color: var(--ink);
+      margin-bottom: 1rem;
+    }
+
+    /* ─── Über Uns ───────────────────────────────────────────────── */
+    #ueber-uns {
+      background: var(--white);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .about-left { position: relative; }
+
+    .about-img-frame {
+      position: relative;
+      padding-bottom: 115%;
+      overflow: hidden;
+    }
+    .about-img-placeholder {
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, var(--ink) 0%, #2a2a3e 100%);
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden;
+    }
+    .about-img-placeholder::before {
+      content: '';
+      position: absolute;
+      width: 200%; height: 200%;
+      background: repeating-linear-gradient(
+        45deg,
+        transparent, transparent 20px,
+        rgba(246,225,50,0.03) 20px, rgba(246,225,50,0.03) 40px
+      );
+    }
+    .about-img-text {
+      font-family: var(--font-display);
+      font-size: clamp(5rem, 14vw, 12rem);
+      color: rgba(255,255,255,0.06);
+      letter-spacing: 0.06em;
+      position: absolute;
+      white-space: nowrap;
+    }
+    .about-img-icon {
+      position: relative; z-index: 2;
+      text-align: center;
+    }
+    .about-img-icon svg {
+      width: 80px; opacity: 0.6;
+    }
+    .about-img-icon p {
+      color: rgba(255,255,255,0.4);
+      font-size: 0.8rem;
+      margin-top: 1rem;
+      letter-spacing: 0.1em;
+    }
+
+    .about-badge {
+      position: absolute;
+      top: 1.8rem; right: -1.8rem;
+      width: 110px; height: 110px;
+      background: var(--yellow);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      flex-direction: column;
+      text-align: center;
+      box-shadow: 0 8px 32px rgba(246,225,50,0.4);
+      animation: float 3s ease-in-out infinite;
+      z-index: 2;
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    .about-badge strong {
+      font-family: var(--font-display);
+      font-size: 2.1rem;
+      color: var(--ink);
+      line-height: 1;
+    }
+    .about-badge span {
+      font-size: 0.58rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: var(--ink2);
+      text-transform: uppercase;
+      line-height: 1.3;
+      padding: 0 8px;
+    }
+
+    .about-right {}
+    .about-quote {
+      font-family: var(--font-serif);
+      font-size: clamp(1.4rem, 2.8vw, 2.1rem);
+      font-style: italic;
+      color: var(--ink);
+      line-height: 1.55;
+      margin-bottom: 2rem;
+      position: relative;
+      padding-left: 1.5rem;
+      border-left: 3px solid var(--yellow);
+    }
+
+    .about-text {
+      font-size: 1rem;
+      color: var(--ink2);
+      line-height: 1.85;
+      margin-bottom: 1.5rem;
+    }
+
+    .about-tags {
+      display: flex; flex-wrap: wrap; gap: 0.6rem;
+      margin-top: 2rem;
+    }
+    .tag-pill {
+      padding: 0.45rem 1.1rem;
+      background: var(--gray);
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      color: var(--ink2);
+      clip-path: polygon(6px 0%, 100% 0%, calc(100% - 6px) 100%, 0% 100%);
+      transition: background 0.2s, color 0.2s;
+    }
+    .tag-pill:hover { background: var(--yellow); color: var(--ink); }
+
+    /* ─── Musik ──────────────────────────────────────────────────── */
+    #musik {
+      background: var(--ink);
+      position: relative;
+      overflow: hidden;
+    }
+    #musik .section-tag { color: var(--yellow); }
+    #musik .section-tag::before { background: var(--yellow); }
+    #musik .section-title { color: var(--white); }
+
+    .musik-bg-text {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      font-family: var(--font-display);
+      font-size: clamp(8rem, 22vw, 20rem);
+      color: rgba(255,255,255,0.025);
+      letter-spacing: 0.04em;
+      white-space: nowrap;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .musik-header {
+      display: flex; justify-content: space-between; align-items: flex-end;
+      margin-bottom: 3.5rem;
+      position: relative; z-index: 2;
+    }
+
+    .songs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.5rem;
+      position: relative; z-index: 2;
+    }
+
+    .song-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      padding: 1.8rem;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.3s, transform 0.3s, background 0.3s;
+      cursor: pointer;
+    }
+    .song-card:hover {
+      border-color: rgba(246,225,50,0.4);
+      background: rgba(246,225,50,0.04);
+      transform: translateY(-4px);
+    }
+    .song-card.featured {
+      grid-column: span 2;
+      background: rgba(246,225,50,0.08);
+      border-color: rgba(246,225,50,0.25);
+    }
+
+    .song-number {
+      font-family: var(--font-display);
+      font-size: 4rem;
+      color: rgba(255,255,255,0.06);
+      position: absolute;
+      top: 0.5rem; right: 1rem;
+      line-height: 1;
+    }
+
+    .song-genre {
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gray2);
+      margin-bottom: 0.8rem;
+    }
+
+    .song-title {
+      font-family: var(--font-display);
+      font-size: clamp(1.5rem, 3vw, 2.4rem);
+      color: var(--white);
+      letter-spacing: 0.04em;
+      margin-bottom: 0.6rem;
+    }
+    .song-card.featured .song-title { color: var(--yellow); }
+
+    .song-desc {
+      font-size: 0.85rem;
+      color: var(--gray2);
+      line-height: 1.6;
+      margin-bottom: 1.2rem;
+    }
+
+    /* Custom Audio Player */
+    .audio-player {
+      margin-top: 1rem;
+    }
+    .audio-top {
+      display: flex; align-items: center; gap: 0.8rem;
+      margin-bottom: 0.8rem;
+    }
+    .play-pause-btn {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      background: var(--yellow);
+      border: none; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: transform 0.2s, background 0.2s;
+      flex-shrink: 0;
+    }
+    .play-pause-btn:hover { background: var(--orange); transform: scale(1.08); }
+
+    .waveform-bars {
+      display: flex; align-items: center; gap: 2px; height: 32px;
+      flex: 1;
+    }
+    .waveform-bars span {
+      display: block;
+      width: 3px;
+      background: rgba(246,225,50,0.35);
+      border-radius: 2px;
+      transition: background 0.2s;
+      animation: wave-idle 1.2s ease-in-out infinite;
+    }
+    .waveform-bars span:nth-child(odd) { animation-delay: 0.2s; }
+    .waveform-bars.playing span {
+      background: var(--yellow);
+      animation: wave-play 0.6s ease-in-out infinite alternate;
+    }
+    .waveform-bars.playing span:nth-child(1) { animation-duration: 0.5s; height: 60%; }
+    .waveform-bars.playing span:nth-child(2) { animation-duration: 0.7s; height: 90%; }
+    .waveform-bars.playing span:nth-child(3) { animation-duration: 0.45s; height: 40%; }
+    .waveform-bars.playing span:nth-child(4) { animation-duration: 0.8s; height: 100%; }
+    .waveform-bars.playing span:nth-child(5) { animation-duration: 0.55s; height: 70%; }
+    .waveform-bars.playing span:nth-child(6) { animation-duration: 0.65s; height: 50%; }
+    .waveform-bars.playing span:nth-child(7) { animation-duration: 0.75s; height: 80%; }
+    .waveform-bars.playing span:nth-child(8) { animation-duration: 0.5s; height: 60%; }
+    .waveform-bars.playing span:nth-child(9) { animation-duration: 0.85s; height: 95%; }
+    .waveform-bars.playing span:nth-child(10) { animation-duration: 0.6s; height: 45%; }
+
+    @keyframes wave-idle {
+      0%, 100% { height: 30%; }
+      50% { height: 50%; }
+    }
+    @keyframes wave-play {
+      from { transform: scaleY(0.6); }
+      to { transform: scaleY(1); }
+    }
+
+    .audio-time {
+      font-family: var(--font-display);
+      font-size: 1rem;
+      color: var(--gray2);
+      letter-spacing: 0.05em;
+    }
+
+    .progress-bar {
+      width: 100%; height: 3px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 2px;
+      cursor: pointer;
+      position: relative;
+    }
+    .progress-fill {
+      height: 100%;
+      background: var(--yellow);
+      border-radius: 2px;
+      width: 0%;
+      transition: width 0.1s linear;
+    }
+    .progress-bar:hover .progress-fill { background: var(--orange); }
+
+    /* ─── Band Members ───────────────────────────────────────────── */
+    #band {
+      position: relative;
+      overflow: hidden;
+      background-color: var(--ink);
+      background-image:
+        linear-gradient(to bottom, rgba(8,8,18,0.68) 0%, rgba(8,8,18,0.55) 50%, rgba(8,8,18,0.78) 100%),
+        url('https://upload.wikimedia.org/wikipedia/commons/thumb/7/74/Regensburg_Uferpanorama_06_2006.jpg/1920px-Regensburg_Uferpanorama_06_2006.jpg');
+      background-size: cover;
+      background-position: center 40%;
+      background-attachment: fixed;
+    }
+    /* mobile: fixed attachment breaks on iOS */
+    @supports (-webkit-touch-callout: none) {
+      #band { background-attachment: scroll; }
+    }
+
+    #band .section-tag { color: var(--yellow); }
+    #band .section-tag::before { background: var(--yellow); }
+    #band .section-title { color: var(--white); }
+    #band .band-header-sub { color: rgba(255,255,255,0.62) !important; }
+
+    .band-header {
+      display: flex; justify-content: space-between; align-items: flex-end;
+      margin-bottom: 0;
+    }
+
+    /* ── Ticker marquee ── */
+    .band-ticker {
+      overflow: hidden;
+      white-space: nowrap;
+      margin: 2.5rem 0 3.5rem;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      padding: 0.75rem 0;
+      position: relative;
+    }
+    .band-ticker::before,
+    .band-ticker::after {
+      content: '';
+      position: absolute;
+      top: 0; bottom: 0;
+      width: 80px;
+      z-index: 2;
+    }
+    .band-ticker::before { left: 0; background: linear-gradient(to right, rgba(8,8,18,0.7), transparent); }
+    .band-ticker::after  { right: 0; background: linear-gradient(to left, rgba(8,8,18,0.7), transparent); }
+
+    .band-ticker-inner {
+      display: inline-flex;
+      animation: band-ticker 22s linear infinite;
+    }
+    .band-ticker-inner span {
+      font-family: var(--font-display);
+      font-size: 1.05rem;
+      letter-spacing: 0.28em;
+      color: rgba(255,255,255,0.28);
+      padding: 0 2.5rem;
+    }
+    .band-ticker-inner em {
+      color: var(--yellow);
+      font-style: normal;
+      opacity: 0.9;
+    }
+    @keyframes band-ticker {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    .members-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 1.2rem;
+    }
+
+    /* ── Glassmorphism card ── */
+    .member-card {
+      position: relative;
+      overflow: hidden;
+      background: rgba(255,255,255,0.09);
+      backdrop-filter: blur(20px) saturate(160%);
+      -webkit-backdrop-filter: blur(20px) saturate(160%);
+      border: 1px solid rgba(255,255,255,0.14);
+      transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+                  background 0.3s, border-color 0.3s, box-shadow 0.3s;
+      cursor: default;
+    }
+    .member-card:hover {
+      transform: translateY(-10px) scale(1.03);
+      background: rgba(255,255,255,0.15);
+      border-color: rgba(246,225,50,0.35);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.45), 0 0 0 1px rgba(246,225,50,0.15);
+    }
+
+    .member-photo {
+      padding-bottom: 130%;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .member-photo-bg {
+      position: absolute; inset: 0;
+      display: flex; align-items: flex-end; justify-content: center;
+      overflow: hidden;
+    }
+
+    .member-initial {
+      font-family: var(--font-display);
+      font-size: clamp(5rem, 12vw, 10rem);
+      line-height: 1;
+      opacity: 0.18;
+      color: var(--white);
+      position: absolute;
+      bottom: -0.1em;
+    }
+
+    .member-accent {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+    }
+
+    .member-body {
+      padding: 1.2rem 1.2rem 1.5rem;
+    }
+    .member-role {
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--yellow);
+      margin-bottom: 0.4rem;
+    }
+    .member-name {
+      font-family: var(--font-display);
+      font-size: 1.6rem;
+      letter-spacing: 0.04em;
+      color: var(--white);
+      line-height: 1;
+      margin-bottom: 0.7rem;
+    }
+    .member-bio {
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.68);
+      line-height: 1.65;
+    }
+
+    /* ─── Booking ────────────────────────────────────────────────── */
+    #buchen {
+      background: var(--yellow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .booking-bg {
+      position: absolute;
+      top: 0; right: 0;
+      width: 40%;
+      height: 100%;
+      background: var(--orange);
+      clip-path: polygon(30% 0%, 100% 0%, 100% 100%, 0% 100%);
+      opacity: 0.18;
+    }
+
+    .booking-container {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 5rem;
+      align-items: start;
+      position: relative; z-index: 2;
+    }
+
+    .booking-left {}
+    .booking-left .section-tag { color: var(--ink); }
+    .booking-left .section-tag::before { background: var(--ink); }
+    .booking-left .section-title { color: var(--ink); }
+
+    .booking-perks {
+      margin-top: 2rem;
+      display: flex; flex-direction: column; gap: 1rem;
+    }
+    .perk {
+      display: flex; align-items: flex-start; gap: 1rem;
+    }
+    .perk-icon {
+      width: 42px; height: 42px;
+      background: var(--ink);
+      color: var(--yellow);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+      clip-path: polygon(5px 0%, 100% 0%, calc(100% - 5px) 100%, 0% 100%);
+    }
+    .perk-text strong {
+      display: block;
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 0.15rem;
+    }
+    .perk-text span {
+      font-size: 0.8rem;
+      color: var(--ink2);
+    }
+
+    /* Booking Form */
+    .booking-form {
+      background: var(--white);
+      padding: 2.8rem;
+      box-shadow: 12px 12px 0 var(--ink);
+    }
+
+    .form-title {
+      font-family: var(--font-display);
+      font-size: 1.8rem;
+      letter-spacing: 0.05em;
+      color: var(--ink);
+      margin-bottom: 2rem;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.2rem;
+    }
+    .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+    .form-group.full { grid-column: span 2; }
+
+    .form-group label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink2);
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      padding: 0.85rem 1rem;
+      border: 2px solid var(--gray);
+      background: var(--cream);
+      font-family: var(--font-body);
+      font-size: 0.9rem;
+      color: var(--ink);
+      outline: none;
+      transition: border-color 0.2s;
+      width: 100%;
+    }
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: var(--ink);
+    }
+    .form-group textarea { resize: vertical; min-height: 110px; }
+    .form-group select { appearance: none; cursor: pointer; }
+
+    .occasions-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.6rem;
+    }
+    .occasion-btn {
+      padding: 0.65rem 0.5rem;
+      border: 2px solid var(--gray);
+      background: var(--cream);
+      font-family: var(--font-body);
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--ink2);
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s;
+    }
+    .occasion-btn:hover,
+    .occasion-btn.active {
+      border-color: var(--ink);
+      background: var(--ink);
+      color: var(--yellow);
+    }
+
+    .form-submit {
+      width: 100%;
+      padding: 1.1rem;
+      background: var(--ink);
+      color: var(--yellow);
+      border: none;
+      cursor: pointer;
+      font-family: var(--font-body);
+      font-size: 0.88rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      transition: background 0.2s, transform 0.15s;
+      margin-top: 0.5rem;
+      clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+    }
+    .form-submit:hover { background: var(--orange); transform: translateY(-2px); }
+
+    .form-success {
+      display: none;
+      text-align: center;
+      padding: 2rem;
+    }
+    .form-success.shown { display: block; }
+    .form-success h3 {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      color: var(--ink);
+      margin-bottom: 0.5rem;
+    }
+    .form-success p { color: var(--ink2); }
+
+    /* ─── Footer ─────────────────────────────────────────────────── */
+    footer {
+      background: var(--ink);
+      padding: 4rem 5vw 2.5rem;
+    }
+
+    .footer-top {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr 1fr;
+      gap: 3rem;
+      margin-bottom: 3rem;
+      padding-bottom: 3rem;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .footer-brand .nav-logo {
+      color: var(--white);
+      display: block;
+      font-size: 2.2rem;
+      margin-bottom: 1rem;
+      text-decoration: none;
+    }
+    .footer-brand p {
+      font-size: 0.88rem;
+      color: var(--gray2);
+      line-height: 1.7;
+      max-width: 280px;
+    }
+
+    .footer-socials {
+      display: flex; gap: 0.7rem; margin-top: 1.5rem;
+    }
+    .social-btn {
+      width: 38px; height: 38px;
+      background: rgba(255,255,255,0.07);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--gray2);
+      text-decoration: none;
+      font-size: 0.85rem;
+      transition: background 0.2s, color 0.2s;
+      clip-path: polygon(4px 0%, 100% 0%, calc(100% - 4px) 100%, 0% 100%);
+    }
+    .social-btn:hover { background: var(--yellow); color: var(--ink); }
+
+    .footer-col h4 {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--yellow);
+      margin-bottom: 1.2rem;
+    }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 0.65rem; }
+    .footer-col ul a {
+      text-decoration: none;
+      color: var(--gray2);
+      font-size: 0.88rem;
+      transition: color 0.2s;
+    }
+    .footer-col ul a:hover { color: var(--white); }
+
+    .footer-bottom {
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 1rem;
+    }
+    .footer-bottom p {
+      color: var(--gray2);
+      font-size: 0.78rem;
+    }
+    .footer-bottom span { color: var(--orange); }
+
+    /* ─── Scroll-reveal animations ───────────────────────────────── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: none;
+    }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.4s; }
+    .reveal-delay-5 { transition-delay: 0.5s; }
+
+    /* ── Band card entrance: dramatic scale + slide ── */
+    #band .member-card.reveal {
+      opacity: 0;
+      transform: translateY(60px) scale(0.88);
+      transition: opacity 0.75s cubic-bezier(0.22,1,0.36,1),
+                  transform 0.75s cubic-bezier(0.22,1,0.36,1);
+    }
+    #band .member-card.reveal.visible {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+    /* alternating left / right entrances */
+    #band .member-card:nth-child(odd).reveal  { transform: translateY(60px) scale(0.88) translateX(-20px); }
+    #band .member-card:nth-child(even).reveal { transform: translateY(60px) scale(0.88) translateX(20px); }
+    #band .member-card.reveal.visible { transform: translateY(0) scale(1) translateX(0); }
+
+    /* ─── Toast ──────────────────────────────────────────────────── */
+    .toast {
+      position: fixed;
+      bottom: 2rem; right: 2rem;
+      background: var(--ink);
+      color: var(--yellow);
+      padding: 1rem 1.6rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      z-index: 9000;
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 0.3s, transform 0.3s;
+      pointer-events: none;
+      clip-path: polygon(6px 0%, 100% 0%, calc(100% - 6px) 100%, 0% 100%);
+    }
+    .toast.show { opacity: 1; transform: none; }
+
+    /* ─── Responsive ─────────────────────────────────────────────── */
+    @media (max-width: 1100px) {
+      .members-grid { grid-template-columns: repeat(3, 1fr); }
+      .song-card.featured { grid-column: span 1; }
+    }
+
+    @media (max-width: 900px) {
+      #hero { grid-template-columns: 1fr; text-align: center; }
+      .hero-left { padding-top: 140px; }
+      .hero-desc { margin: 0 auto 2.5rem; }
+      .hero-cta { justify-content: center; }
+      .hero-right { display: none; }
+      .hero-bg-shape { display: none; }
+
+      #ueber-uns { grid-template-columns: 1fr; }
+      .about-badge { right: 1rem; top: 1rem; }
+
+      .booking-container { grid-template-columns: 1fr; gap: 3rem; }
+      .footer-top { grid-template-columns: 1fr 1fr; }
+
+      nav .nav-links { display: none; }
+      .hamburger { display: flex; }
+    }
+
+    @media (max-width: 600px) {
+      section { padding: 5rem 5vw; }
+      .members-grid { grid-template-columns: 1fr 1fr; }
+      .form-grid { grid-template-columns: 1fr; }
+      .form-group.full { grid-column: span 1; }
+      .footer-top { grid-template-columns: 1fr; }
+      .occasions-grid { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 400px) {
+      .members-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Audio Element -->
+<audio id="bg-audio" src="Hold on.mp3" loop preload="auto"></audio>
+
+<!-- ─── Intro Overlay ─────────────────────────────────────────── -->
+<div id="intro-overlay">
+  <div class="intro-vinyl"></div>
+  <div class="intro-logo">
+    Skyline
+    <span>Musik</span>
+  </div>
+  <p class="intro-sub">Live-Musik für unvergessliche Momente</p>
+  <button class="intro-btn" id="enter-btn">
+    ♪ &nbsp;Jetzt Eintreten
+  </button>
+</div>
+
+<!-- ─── Toast ─────────────────────────────────────────────────── -->
+<div class="toast" id="toast">Musik spielt jetzt ♪</div>
+
+<!-- ─── Navigation ───────────────────────────────────────────── -->
+<nav id="navbar">
+  <a href="#" class="nav-logo">Skyline<em>-</em>Musik</a>
+  <ul class="nav-links">
+    <li><a href="#ueber-uns">Über Uns</a></li>
+    <li><a href="#musik">Musik</a></li>
+    <li><a href="#band">Die Band</a></li>
+    <li><a href="#buchen" class="nav-book">Jetzt Buchen</a></li>
+  </ul>
+  <button class="hamburger" id="hamburger" aria-label="Menü öffnen">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- ─── Hero ─────────────────────────────────────────────────── -->
+<section id="hero">
+  <div class="hero-bg-dots"></div>
+  <div class="hero-bg-shape"></div>
+
+  <div class="hero-left">
+    <div class="hero-tag">Live-Band · 5 Musiker</div>
+    <h1 class="hero-title">
+      Skyline
+      <span class="line2">Musik</span>
+    </h1>
+    <p class="hero-desc">
+      Wir bringen Leidenschaft, Energie und pure Musik-Magie auf jede Bühne —
+      von intimen Feiern bis zu großen Festivalbühnen.
+    </p>
+    <div class="hero-cta">
+      <a href="#musik" class="btn-primary">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>
+        Unsere Musik
+      </a>
+      <a href="#buchen" class="btn-secondary">Termin Anfragen</a>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="vinyl-container">
+      <div class="vinyl-record" id="vinyl-record">
+        <div class="vinyl-center">
+          <span>Hold On</span>
+        </div>
+      </div>
+      <button class="vinyl-play-btn" id="vinyl-play" aria-label="Musik abspielen">
+        <svg id="play-icon" width="22" height="22" viewBox="0 0 24 24" fill="white"><polygon points="6,3 20,12 6,21"/></svg>
+      </button>
+      <div class="hero-stats">
+        <div class="stat">
+          <span class="stat-num">5</span>
+          <span class="stat-label">Musiker</span>
+        </div>
+        <div class="stat">
+          <span class="stat-num">200+</span>
+          <span class="stat-label">Auftritte</span>
+        </div>
+        <div class="stat">
+          <span class="stat-num">10+</span>
+          <span class="stat-label">Jahre</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="scroll-hint">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- ─── Über Uns ──────────────────────────────────────────────── -->
+<section id="ueber-uns">
+  <div class="about-left reveal">
+    <div class="about-img-frame">
+      <div class="about-img-placeholder">
+        <div class="about-img-text">LIVE</div>
+        <div class="about-img-icon">
+          <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="40" cy="40" r="36" stroke="rgba(255,255,255,0.3)" stroke-width="2"/>
+            <path d="M28 28 C28 28 32 20 40 20 C48 20 52 28 52 28 L52 46 C52 52 48 56 40 56 C32 56 28 52 28 46 Z" stroke="rgba(255,255,255,0.5)" stroke-width="2" fill="none"/>
+            <path d="M34 60 L34 68 M46 60 L46 68 M30 68 L50 68" stroke="rgba(255,255,255,0.5)" stroke-width="2" stroke-linecap="round"/>
+            <path d="M22 36 C18 36 16 38 16 40 C16 42 18 44 22 44" stroke="rgba(255,255,255,0.4)" stroke-width="2" fill="none"/>
+            <path d="M58 36 C62 36 64 38 64 40 C64 42 62 44 58 44" stroke="rgba(255,255,255,0.4)" stroke-width="2" fill="none"/>
+          </svg>
+          <p>Bandphoto</p>
+        </div>
+      </div>
+    </div>
+    <div class="about-badge">
+      <strong>10+</strong>
+      <span>Jahre Erfahrung</span>
+    </div>
+  </div>
+
+  <div class="about-right">
+    <div class="reveal">
+      <div class="section-tag">Über Uns</div>
+      <h2 class="section-title">Musik, die<br/>bewegt.</h2>
+    </div>
+    <blockquote class="about-quote reveal reveal-delay-1">
+      „Jeder Auftritt ist für uns mehr als ein Konzert —
+       es ist ein Erlebnis, das verbindet."
+    </blockquote>
+    <p class="about-text reveal reveal-delay-2">
+      Skyline-Musik ist eine fünfköpfige Live-Band aus dem Herzen Deutschlands.
+      Gegründet aus echter Leidenschaft für Musik, haben wir uns über die Jahre
+      zu einer der gefragtesten Liveband der Region entwickelt. Unsere Musik
+      verbindet moderne Popsongs mit emotionalen Balladen, treibenden Rocknummern
+      und eleganten Jazz-Einflüssen.
+    </p>
+    <p class="about-text reveal reveal-delay-3">
+      Ob Hochzeitsfeier, Geburtstagsparty, Firmenevent oder Stadtfest —
+      wir passen unser Programm individuell an eure Wünsche an und sorgen
+      für eine Atmosphäre, die lange in Erinnerung bleibt.
+    </p>
+    <div class="about-tags reveal reveal-delay-4">
+      <span class="tag-pill">Pop</span>
+      <span class="tag-pill">Rock</span>
+      <span class="tag-pill">Soul</span>
+      <span class="tag-pill">Jazz</span>
+      <span class="tag-pill">Deutsch-Pop</span>
+      <span class="tag-pill">Unplugged</span>
+      <span class="tag-pill">Charts</span>
+      <span class="tag-pill">Eigene Songs</span>
+    </div>
+  </div>
+</section>
+
+<!-- ─── Musik ──────────────────────────────────────────────────── -->
+<section id="musik">
+  <div class="musik-bg-text">SOUND</div>
+  <div class="musik-header">
+    <div class="reveal">
+      <div class="section-tag">Unsere Musik</div>
+      <h2 class="section-title">Songs &amp;<br/>Repertoire</h2>
+    </div>
+    <p class="reveal" style="color:var(--gray2); max-width:300px; font-size:0.9rem; line-height:1.7;">
+      Von eingängigen Pop-Hits bis zu unvergesslichen Balladen —
+      unser Repertoire umfasst über 200 Songs.
+    </p>
+  </div>
+
+  <div class="songs-grid">
+    <!-- Featured Song with Player -->
+    <div class="song-card featured reveal">
+      <span class="song-number">01</span>
+      <p class="song-genre">Featured Single</p>
+      <h3 class="song-title">Hold On</h3>
+      <p class="song-desc">
+        Unsere neueste Single — eine emotionale Reise mit kraftvollen Vocals,
+        pulsierendem Beat und einer Melodie, die sich in dein Herz brennt.
+      </p>
+      <div class="audio-player">
+        <div class="audio-top">
+          <button class="play-pause-btn" id="song-play-btn" aria-label="Abspielen">
+            <svg id="song-play-icon" width="18" height="18" viewBox="0 0 24 24" fill="#111118"><polygon points="6,3 20,12 6,21"/></svg>
+          </button>
+          <div class="waveform-bars" id="waveform">
+            <span style="height:40%"></span><span style="height:75%"></span>
+            <span style="height:55%"></span><span style="height:90%"></span>
+            <span style="height:65%"></span><span style="height:45%"></span>
+            <span style="height:80%"></span><span style="height:60%"></span>
+            <span style="height:95%"></span><span style="height:50%"></span>
+          </div>
+          <span class="audio-time" id="audio-time">0:00</span>
+        </div>
+        <div class="progress-bar" id="progress-bar">
+          <div class="progress-fill" id="progress-fill"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Other Songs -->
+    <div class="song-card reveal reveal-delay-1">
+      <span class="song-number">02</span>
+      <p class="song-genre">Ballade</p>
+      <h3 class="song-title">Nachtlichter</h3>
+      <p class="song-desc">Eine zarte Ballade über stille Momente und das Leuchten in dunklen Nächten.</p>
+    </div>
+
+    <div class="song-card reveal reveal-delay-2">
+      <span class="song-number">03</span>
+      <p class="song-genre">Uptempo Pop</p>
+      <h3 class="song-title">Freier Fall</h3>
+      <p class="song-desc">Treibende Gitarren, mitreißender Beat — der perfekte Song für die Tanzfläche.</p>
+    </div>
+
+    <div class="song-card reveal reveal-delay-3">
+      <span class="song-number">04</span>
+      <p class="song-genre">Indie Rock</p>
+      <h3 class="song-title">Skyline Drive</h3>
+      <p class="song-desc">Unser Namensträger — ein kraftvolles Gitarrenriff trifft auf cinematische Weite.</p>
+    </div>
+
+    <div class="song-card reveal reveal-delay-4">
+      <span class="song-number">05</span>
+      <p class="song-genre">Soul / R&amp;B</p>
+      <h3 class="song-title">Goldener Moment</h3>
+      <p class="song-desc">Warme Grooves, samtene Vocals und ein Chorus der sich anfühlt wie ein Umarmung.</p>
+    </div>
+
+    <div class="song-card reveal reveal-delay-5">
+      <span class="song-number">06</span>
+      <p class="song-genre">Hochzeitshit</p>
+      <h3 class="song-title">Für immer hier</h3>
+      <p class="song-desc">Speziell für große Momente — unser beliebtester Song bei Hochzeiten und Feiern.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ─── Band Members ──────────────────────────────────────────── -->
+<section id="band">
+  <div class="band-header">
+    <div class="reveal">
+      <div class="section-tag">Die Band</div>
+      <h2 class="section-title">Fünf<br/>Musiker.</h2>
+    </div>
+    <p class="band-header-sub reveal" style="max-width:320px; font-size:0.92rem; line-height:1.75;">
+      Leidenschaft, Können und musikalische Vielfalt –
+      jedes Mitglied steht für Klasse und individuellen Stil.
+    </p>
+  </div>
+
+  <!-- Scrolling ticker -->
+  <div class="band-ticker">
+    <div class="band-ticker-inner">
+      <span>SKYLINE-MUSIK</span><span>·</span>
+      <span><em>REGENSBURG</em></span><span>·</span>
+      <span>LIVE-BAND</span><span>·</span>
+      <span><em>POP · ROCK · SOUL</em></span><span>·</span>
+      <span>HOCHZEITEN</span><span>·</span>
+      <span><em>EVENTS</em></span><span>·</span>
+      <span>FÜNF MUSIKER</span><span>·</span>
+      <span><em>200+ AUFTRITTE</em></span><span>·</span>
+      <!-- duplicate for seamless loop -->
+      <span>SKYLINE-MUSIK</span><span>·</span>
+      <span><em>REGENSBURG</em></span><span>·</span>
+      <span>LIVE-BAND</span><span>·</span>
+      <span><em>POP · ROCK · SOUL</em></span><span>·</span>
+      <span>HOCHZEITEN</span><span>·</span>
+      <span><em>EVENTS</em></span><span>·</span>
+      <span>FÜNF MUSIKER</span><span>·</span>
+      <span><em>200+ AUFTRITTE</em></span><span>·</span>
+    </div>
+  </div>
+
+  <div class="members-grid">
+
+    <!-- Member 1: Alois -->
+    <div class="member-card reveal">
+      <div class="member-photo">
+        <div class="member-photo-bg" style="background: linear-gradient(160deg, rgba(100,90,200,0.45) 0%, rgba(60,50,140,0.55) 100%);">
+          <span class="member-initial">A</span>
+        </div>
+        <div class="member-accent" style="background: linear-gradient(90deg, var(--yellow), var(--orange));"></div>
+      </div>
+      <div class="member-body">
+        <p class="member-role">Multiinstrumentalist</p>
+        <h3 class="member-name">Alois</h3>
+        <p class="member-bio">Jahrzehntelange Live-Erfahrung, ausgebildet an der Musikschule Regensburg und im Heeresmusikkorps der Bundeswehr.</p>
+      </div>
+    </div>
+
+    <!-- Member 2: Hermann -->
+    <div class="member-card reveal reveal-delay-1">
+      <div class="member-photo">
+        <div class="member-photo-bg" style="background: linear-gradient(160deg, rgba(220,90,50,0.45) 0%, rgba(160,50,20,0.55) 100%);">
+          <span class="member-initial">H</span>
+        </div>
+        <div class="member-accent" style="background: linear-gradient(90deg, var(--orange), #ff3b3b);"></div>
+      </div>
+      <div class="member-body">
+        <p class="member-role">Gesang &amp; Multi-Instrumentalist</p>
+        <h3 class="member-name">Hermann</h3>
+        <p class="member-bio">Vielseitiger Sänger mit erstklassiger Ausbildung — Stationen bei NUGGETS, COCKPIT und den SÄNDLERN.</p>
+      </div>
+    </div>
+
+    <!-- Member 3: Andi -->
+    <div class="member-card reveal reveal-delay-2">
+      <div class="member-photo">
+        <div class="member-photo-bg" style="background: linear-gradient(160deg, rgba(30,180,160,0.45) 0%, rgba(10,120,110,0.55) 100%);">
+          <span class="member-initial">A</span>
+        </div>
+        <div class="member-accent" style="background: linear-gradient(90deg, #3ECFCF, #2aa8a8);"></div>
+      </div>
+      <div class="member-body">
+        <p class="member-role">Gesang, Saiten &amp; Blas</p>
+        <h3 class="member-name">Andi</h3>
+        <p class="member-bio">Markante Stimme und meisterhafte Beherrschung verschiedener Saiten- und Blasinstrumente.</p>
+      </div>
+    </div>
+
+    <!-- Member 4: Tom -->
+    <div class="member-card reveal reveal-delay-3">
+      <div class="member-photo">
+        <div class="member-photo-bg" style="background: linear-gradient(160deg, rgba(150,60,220,0.45) 0%, rgba(90,20,160,0.55) 100%);">
+          <span class="member-initial">T</span>
+        </div>
+        <div class="member-accent" style="background: linear-gradient(90deg, #a855f7, #7c3aed);"></div>
+      </div>
+      <div class="member-body">
+        <p class="member-role">Gitarre &amp; Gesang</p>
+        <h3 class="member-name">Tom</h3>
+        <p class="member-bio">Über 20 Jahre Bühnenerfahrung – von Rock bis Oriental Pop. Seine Energie reißt einfach mit!</p>
+      </div>
+    </div>
+
+    <!-- Member 5: Heiner -->
+    <div class="member-card reveal reveal-delay-4">
+      <div class="member-photo">
+        <div class="member-photo-bg" style="background: linear-gradient(160deg, rgba(210,185,20,0.45) 0%, rgba(150,130,0,0.55) 100%);">
+          <span class="member-initial">H</span>
+        </div>
+        <div class="member-accent" style="background: linear-gradient(90deg, var(--yellow), #e6d020);"></div>
+      </div>
+      <div class="member-body">
+        <p class="member-role">Keys &amp; Tasten</p>
+        <h3 class="member-name">Heiner</h3>
+        <p class="member-bio">Tastenvirtuose mit Wurzeln bei den Regensburger Domspatzen und internationaler Bühnen- und Studioerfahrung.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ─── Buchen ─────────────────────────────────────────────────── -->
+<section id="buchen">
+  <div class="booking-bg"></div>
+  <div class="booking-container">
+    <div class="booking-left reveal">
+      <div class="section-tag">Jetzt Buchen</div>
+      <h2 class="section-title">Euer Event.<br/>Unser Sound.</h2>
+      <p style="margin-top:1.2rem; color:var(--ink2); font-size:0.95rem; line-height:1.75;">
+        Ihr plant eine Feier und wollt Live-Musik, die wirklich Eindruck hinterlässt?
+        Füllt einfach das Formular aus — wir melden uns innerhalb von 24 Stunden.
+      </p>
+
+      <div class="booking-perks">
+        <div class="perk">
+          <div class="perk-icon">♪</div>
+          <div class="perk-text">
+            <strong>Individuelles Programm</strong>
+            <span>Wir passen unser Set speziell auf euren Anlass an</span>
+          </div>
+        </div>
+        <div class="perk">
+          <div class="perk-icon">★</div>
+          <div class="perk-text">
+            <strong>Professionelles Equipment</strong>
+            <span>Erstklassige PA-Anlage und Lichtanlage inklusive</span>
+          </div>
+        </div>
+        <div class="perk">
+          <div class="perk-icon">✓</div>
+          <div class="perk-text">
+            <strong>Zuverlässig &amp; erfahren</strong>
+            <span>Über 200 erfolgreiche Auftritte sprechen für sich</span>
+          </div>
+        </div>
+        <div class="perk">
+          <div class="perk-icon">♥</div>
+          <div class="perk-text">
+            <strong>Persönliche Beratung</strong>
+            <span>Wir nehmen uns Zeit für eure Wünsche und Vorstellungen</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="booking-form reveal reveal-delay-2">
+      <h3 class="form-title">Anfrage senden</h3>
+
+      <div id="booking-form-content">
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="fname">Vorname *</label>
+            <input type="text" id="fname" placeholder="Max" required />
+          </div>
+          <div class="form-group">
+            <label for="lname">Nachname *</label>
+            <input type="text" id="lname" placeholder="Mustermann" required />
+          </div>
+          <div class="form-group">
+            <label for="email">E-Mail *</label>
+            <input type="email" id="email" placeholder="max@example.de" required />
+          </div>
+          <div class="form-group">
+            <label for="phone">Telefon</label>
+            <input type="tel" id="phone" placeholder="+49 123 456789" />
+          </div>
+          <div class="form-group">
+            <label for="event-date">Datum des Events *</label>
+            <input type="date" id="event-date" required />
+          </div>
+          <div class="form-group">
+            <label for="location">Veranstaltungsort</label>
+            <input type="text" id="location" placeholder="Stadt / Venue" />
+          </div>
+
+          <div class="form-group full">
+            <label>Art des Events *</label>
+            <div class="occasions-grid">
+              <button type="button" class="occasion-btn" data-val="Hochzeit">💍 Hochzeit</button>
+              <button type="button" class="occasion-btn" data-val="Geburtstag">🎂 Geburtstag</button>
+              <button type="button" class="occasion-btn" data-val="Firmenevent">🏢 Firmenevent</button>
+              <button type="button" class="occasion-btn" data-val="Stadtfest">🎪 Stadtfest</button>
+              <button type="button" class="occasion-btn" data-val="Privat">🏡 Privatfeier</button>
+              <button type="button" class="occasion-btn" data-val="Sonstiges">✨ Sonstiges</button>
+            </div>
+          </div>
+
+          <div class="form-group full">
+            <label for="message">Eure Nachricht</label>
+            <textarea id="message" placeholder="Erzählt uns von eurem Event, euren Musikwünschen und allem, was ihr euch vorstellt..."></textarea>
+          </div>
+        </div>
+        <button type="button" class="form-submit" id="form-submit-btn">
+          Anfrage Absenden →
+        </button>
+      </div>
+
+      <div class="form-success" id="form-success">
+        <div style="font-size:3rem; margin-bottom:1rem;">🎶</div>
+        <h3>Danke für eure Anfrage!</h3>
+        <p>Wir freuen uns auf euer Event und melden uns innerhalb von 24 Stunden bei euch.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── Footer ─────────────────────────────────────────────────── -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <a href="#" class="nav-logo">Skyline<em>-</em>Musik</a>
+      <p>Fünf Musiker. Ein Klang. Unendliche Energie.
+         Wir bringen eure Feier zum Leben — mit Live-Musik,
+         die direkt ins Herz geht.</p>
+      <div class="footer-socials">
+        <a href="#" class="social-btn" aria-label="Instagram">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+        </a>
+        <a href="#" class="social-btn" aria-label="Facebook">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>
+        </a>
+        <a href="#" class="social-btn" aria-label="YouTube">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22.54 6.42a2.78 2.78 0 00-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 00-1.95 1.96A29 29 0 001 12a29 29 0 00.46 5.58A2.78 2.78 0 003.41 19.6C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 001.95-1.95A29 29 0 0023 12a29 29 0 00-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="currentColor" stroke="none"/></svg>
+        </a>
+        <a href="#" class="social-btn" aria-label="Spotify">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 13.5c2.5-1 5-1 7.5 0M7 10.5c3-1.5 6.5-1.5 10 0M9 16.5c2-0.7 4-0.7 6 0"/></svg>
+        </a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Navigation</h4>
+      <ul>
+        <li><a href="#ueber-uns">Über Uns</a></li>
+        <li><a href="#musik">Unsere Musik</a></li>
+        <li><a href="#band">Die Band</a></li>
+        <li><a href="#buchen">Jetzt Buchen</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Kontakt</h4>
+      <ul>
+        <li><a href="mailto:info@skyline-musik.de">info@skyline-musik.de</a></li>
+        <li><a href="tel:+4912345678">+49 123 456 789</a></li>
+        <li><a href="#">Impressum</a></li>
+        <li><a href="#">Datenschutz</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>&copy; 2025 Skyline-Musik. Alle Rechte vorbehalten. Made with <span>♥</span> für Live-Musik.</p>
+    <p style="font-size:0.75rem;">Fünf Musiker · Ein Klang · Unvergessliche Momente</p>
+  </div>
+</footer>
+
+<script>
+  /* ─── Intro Overlay ─────────────────────────────────────────── */
+  const audio = document.getElementById('bg-audio');
+  const overlay = document.getElementById('intro-overlay');
+  const enterBtn = document.getElementById('enter-btn');
+  const toast = document.getElementById('toast');
+  const vinyl = document.getElementById('vinyl-record');
+  const vinylPlayBtn = document.getElementById('vinyl-play');
+  const playIcon = document.getElementById('play-icon');
+
+  let isPlaying = false;
+
+  function showToast(msg) {
+    toast.textContent = msg;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 3000);
+  }
+
+  function startAudio() {
+    audio.play().catch(() => {});
+    isPlaying = true;
+    vinyl.classList.add('playing');
+    playIcon.innerHTML = '<rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/>';
+    showToast('♪  Musik spielt jetzt');
+  }
+
+  function stopAudio() {
+    audio.pause();
+    isPlaying = false;
+    vinyl.classList.remove('playing');
+    playIcon.innerHTML = '<polygon points="6,3 20,12 6,21"/>';
+  }
+
+  enterBtn.addEventListener('click', () => {
+    overlay.classList.add('hidden');
+    setTimeout(() => startAudio(), 600);
+  });
+
+  vinylPlayBtn.addEventListener('click', () => {
+    isPlaying ? stopAudio() : startAudio();
+  });
+
+  /* ─── Song Audio Player ─────────────────────────────────────── */
+  const songPlayBtn = document.getElementById('song-play-btn');
+  const songPlayIcon = document.getElementById('song-play-icon');
+  const waveform = document.getElementById('waveform');
+  const progressFill = document.getElementById('progress-fill');
+  const progressBar = document.getElementById('progress-bar');
+  const audioTime = document.getElementById('audio-time');
+
+  function formatTime(s) {
+    const m = Math.floor(s / 60);
+    const sec = Math.floor(s % 60);
+    return `${m}:${sec.toString().padStart(2, '0')}`;
+  }
+
+  songPlayBtn.addEventListener('click', () => {
+    if (isPlaying) {
+      stopAudio();
+      waveform.classList.remove('playing');
+      songPlayIcon.innerHTML = '<polygon points="6,3 20,12 6,21"/>';
+    } else {
+      startAudio();
+      waveform.classList.add('playing');
+      songPlayIcon.innerHTML = '<rect x="5" y="4" width="4" height="16" rx="1"/><rect x="15" y="4" width="4" height="16" rx="1"/>';
+    }
+  });
+
+  audio.addEventListener('timeupdate', () => {
+    if (audio.duration) {
+      const pct = (audio.currentTime / audio.duration) * 100;
+      progressFill.style.width = pct + '%';
+      audioTime.textContent = formatTime(audio.currentTime);
+    }
+  });
+
+  progressBar.addEventListener('click', (e) => {
+    const rect = progressBar.getBoundingClientRect();
+    const ratio = (e.clientX - rect.left) / rect.width;
+    if (audio.duration) audio.currentTime = ratio * audio.duration;
+  });
+
+  audio.addEventListener('play', () => {
+    waveform.classList.add('playing');
+    songPlayIcon.innerHTML = '<rect x="5" y="4" width="4" height="16" rx="1"/><rect x="15" y="4" width="4" height="16" rx="1"/>';
+  });
+  audio.addEventListener('pause', () => {
+    waveform.classList.remove('playing');
+    songPlayIcon.innerHTML = '<polygon points="6,3 20,12 6,21"/>';
+  });
+
+  /* ─── Navbar scroll ─────────────────────────────────────────── */
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 40);
+  }, { passive: true });
+
+  /* ─── Occasion buttons ──────────────────────────────────────── */
+  document.querySelectorAll('.occasion-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.occasion-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    });
+  });
+
+  /* ─── Booking Form ──────────────────────────────────────────── */
+  document.getElementById('form-submit-btn').addEventListener('click', () => {
+    const fname = document.getElementById('fname').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const date  = document.getElementById('event-date').value;
+    const activeOccasion = document.querySelector('.occasion-btn.active');
+
+    if (!fname || !email || !date || !activeOccasion) {
+      showToast('⚠  Bitte alle Pflichtfelder ausfüllen');
+      return;
+    }
+
+    document.getElementById('booking-form-content').style.display = 'none';
+    document.getElementById('form-success').classList.add('shown');
+  });
+
+  /* ─── Scroll Reveal ─────────────────────────────────────────── */
+  const revealEls = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.08 });
+
+  revealEls.forEach(el => observer.observe(el));
+
+  /* ─── Band section parallax ──────────────────────────────────── */
+  const bandSection = document.getElementById('band');
+  // Only use JS parallax when CSS fixed attachment is not available (iOS)
+  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+
+  function updateBandParallax() {
+    if (!bandSection || !isIOS) return;
+    const rect = bandSection.getBoundingClientRect();
+    const viewH = window.innerHeight;
+    if (rect.bottom < 0 || rect.top > viewH) return;
+    // how far we've scrolled through the section (0 = top entering, 1 = bottom leaving)
+    const progress = 1 - (rect.bottom / (viewH + rect.height));
+    const offset = Math.round(progress * 30); // max 30% vertical shift
+    bandSection.style.backgroundPosition = `center ${40 + offset}%`;
+  }
+
+  window.addEventListener('scroll', updateBandParallax, { passive: true });
+  updateBandParallax();
+</script>
+
+</body>
+</html>
