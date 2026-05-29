@@ -183,13 +183,34 @@
     /* ─── Hero ───────────────────────────────────────────────────── */
     #hero {
       min-height: 100vh;
-      background: var(--cream);
+      background: var(--cream); /* fallback */
       display: grid;
       grid-template-columns: 1fr 1fr;
       align-items: center;
       padding: 0 5vw;
       position: relative;
       overflow: hidden;
+    }
+
+    .hero-bg-photo {
+      position: absolute;
+      inset: 0;
+      background: url('A6C43FBD-561A-41B8-A2BB-FEFDFF9F2541.jpeg') no-repeat left center / cover;
+      z-index: 0;
+    }
+
+    .hero-bg-photo-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to right,
+        rgba(250,248,242,0.82) 0%,
+        rgba(250,248,242,0.65) 35%,
+        rgba(250,248,242,0.2) 52%,
+        transparent 62%
+      );
+      z-index: 0;
+      pointer-events: none;
     }
 
     .hero-bg-shape {
@@ -1262,6 +1283,8 @@
 
 <!-- ─── Hero ─────────────────────────────────────────────────── -->
 <section id="hero">
+  <div class="hero-bg-photo"></div>
+  <div class="hero-bg-photo-overlay"></div>
   <div class="hero-bg-dots"></div>
   <div class="hero-bg-shape"></div>
 
