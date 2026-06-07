@@ -1164,6 +1164,165 @@
     #band .member-card:nth-child(even).reveal { transform: translateY(60px) scale(0.88) translateX(20px); }
     #band .member-card.reveal.visible { transform: translateY(0) scale(1) translateX(0); }
 
+    /* ─── Programm ──────────────────────────────────────────────── */
+    #programm {
+      background: var(--white);
+    }
+
+    .programm-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 2.5rem;
+      flex-wrap: wrap;
+      gap: 2rem;
+    }
+
+    .programm-desc {
+      margin-top: 1rem;
+      color: var(--ink2);
+      font-size: 0.95rem;
+      line-height: 1.75;
+      max-width: 460px;
+    }
+
+    .programm-right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 0.6rem;
+      padding-top: 3rem;
+    }
+
+    .programm-search-wrap {
+      position: relative;
+    }
+
+    .programm-search-icon {
+      position: absolute;
+      left: 0.9rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--gray2);
+      pointer-events: none;
+    }
+
+    #programm-search {
+      padding: 0.85rem 1rem 0.85rem 2.8rem;
+      border: 2px solid var(--gray);
+      background: var(--cream);
+      font-family: var(--font-body);
+      font-size: 0.88rem;
+      color: var(--ink);
+      outline: none;
+      transition: border-color 0.2s;
+      width: 300px;
+    }
+
+    #programm-search:focus { border-color: var(--ink); }
+
+    #programm-count {
+      font-size: 0.72rem;
+      color: var(--gray2);
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .medleys-row {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2.5rem;
+      flex-wrap: wrap;
+    }
+
+    .medley-card {
+      padding: 0.85rem 1.6rem;
+      background: var(--ink);
+      clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+    }
+
+    .medley-card-title {
+      font-family: var(--font-display);
+      font-size: 1.05rem;
+      letter-spacing: 0.04em;
+      color: var(--yellow);
+      display: block;
+    }
+
+    .medley-card-sub {
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gray2);
+      display: block;
+      margin-top: 0.15rem;
+    }
+
+    .songs-list {
+      list-style: none;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--gray);
+      border: 1px solid var(--gray);
+    }
+
+    .song-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.65rem 1rem;
+      background: var(--white);
+      transition: background 0.15s;
+      overflow: hidden;
+      min-width: 0;
+    }
+
+    .song-item:hover { background: var(--cream); }
+
+    .song-item.hidden { display: none; }
+
+    .song-item-title {
+      font-size: 0.83rem;
+      font-weight: 600;
+      color: var(--ink);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      flex-shrink: 1;
+      min-width: 0;
+    }
+
+    .song-item-sep {
+      color: var(--orange);
+      font-size: 0.5rem;
+      flex-shrink: 0;
+    }
+
+    .song-item-artist {
+      font-size: 0.74rem;
+      color: var(--gray2);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      flex-shrink: 1;
+      min-width: 0;
+    }
+
+    #no-results {
+      display: none;
+      padding: 3rem;
+      text-align: center;
+      color: var(--gray2);
+      font-size: 0.9rem;
+      border: 1px solid var(--gray);
+      border-top: none;
+    }
+
+    #no-results.visible { display: block; }
+
     /* ─── Toast ──────────────────────────────────────────────────── */
     .toast {
       position: fixed;
@@ -1203,6 +1362,10 @@
       .booking-container { grid-template-columns: 1fr; gap: 3rem; }
       .footer-top { grid-template-columns: 1fr 1fr; }
 
+      .songs-list { grid-template-columns: repeat(2, 1fr); }
+      .programm-right { align-items: flex-start; padding-top: 0; }
+      #programm-search { width: 100%; }
+
       nav .nav-links { display: none; }
       .hamburger { display: flex; }
     }
@@ -1214,6 +1377,7 @@
       .form-group.full { grid-column: span 1; }
       .footer-top { grid-template-columns: 1fr; }
       .occasions-grid { grid-template-columns: 1fr 1fr; }
+      .songs-list { grid-template-columns: 1fr; }
     }
 
     @media (max-width: 400px) {
@@ -1249,6 +1413,7 @@
     <li><a href="#ueber-uns">Über Uns</a></li>
     <li><a href="#musik">Musik</a></li>
     <li><a href="#band">Die Band</a></li>
+    <li><a href="#programm">Programm</a></li>
     <li><a href="#buchen" class="nav-book">Jetzt Buchen</a></li>
   </ul>
   <button class="hamburger" id="hamburger" aria-label="Menü öffnen">
@@ -1525,9 +1690,9 @@
         <div class="member-accent" style="background: linear-gradient(90deg, #3ECFCF, #2aa8a8);"></div>
       </div>
       <div class="member-body">
-        <p class="member-role">Gesang, Saiten &amp; Blas</p>
+        <p class="member-role">Gesang · Gitarre · E-Bass · Trompete · Bariton</p>
         <h3 class="member-name">Andi</h3>
-        <p class="member-bio">Markante Stimme und meisterhafte Beherrschung verschiedener Saiten- und Blasinstrumente.</p>
+        <p class="member-bio">Mit 5 Jahren entdeckte er seine Leidenschaft für Musik. Stationen bei Phoenix, Six Pac, Chris Wittl &amp; Friends und d'Sandler sowie 3 Jahre Hauptsänger beim Symphonischen Orchester Parsberg (SBOP). Seine Gänsehautstimme macht jeden Auftritt unvergesslich.</p>
       </div>
     </div>
 
@@ -1564,6 +1729,46 @@
     </div>
 
   </div>
+</section>
+
+<!-- ─── Programm ────────────────────────────────────────────────── -->
+<section id="programm">
+  <div class="programm-header">
+    <div class="reveal">
+      <div class="section-tag">Repertoire</div>
+      <h2 class="section-title">Unser<br/>Programm.</h2>
+      <p class="programm-desc">
+        Von Klassikern der 60er bis zu aktuellen Charts — unser Repertoire umfasst
+        über 130 Songs aus Rock, Pop, Schlager, Volksmusik, Soul und mehr.
+        Für jeden Anlass und jeden Geschmack ist etwas dabei.
+      </p>
+    </div>
+    <div class="programm-right reveal reveal-delay-2">
+      <div class="programm-search-wrap">
+        <svg class="programm-search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <input type="search" id="programm-search" placeholder="Song oder Künstler suchen …" autocomplete="off" />
+      </div>
+      <span id="programm-count">0 Songs</span>
+    </div>
+  </div>
+
+  <div class="medleys-row reveal">
+    <div class="medley-card">
+      <span class="medley-card-title">60's Party Mix</span>
+      <span class="medley-card-sub">Medley</span>
+    </div>
+    <div class="medley-card">
+      <span class="medley-card-title">Skyline Rock'n Roll Mix 2025</span>
+      <span class="medley-card-sub">Medley</span>
+    </div>
+    <div class="medley-card">
+      <span class="medley-card-title">SKYLINES 60's Party Mix</span>
+      <span class="medley-card-sub">Sugar · Sweets · Venus · Keep… · Medley</span>
+    </div>
+  </div>
+
+  <ul class="songs-list" id="songs-list" aria-label="Songliste Skyline-Musik"></ul>
+  <p id="no-results">Kein Song gefunden.</p>
 </section>
 
 <!-- ─── Buchen ─────────────────────────────────────────────────── -->
@@ -1852,6 +2057,179 @@
   }, { threshold: 0.08 });
 
   revealEls.forEach(el => observer.observe(el));
+
+  /* ─── Programm Song List ────────────────────────────────────── */
+  const songData = [
+    ["A Hard Day's Night", "The Beatles"],
+    ["A Night Like This", "Caro Emerald"],
+    ["A Whiter Shade of Pale", "Procol Harum"],
+    ["Achy Breaky Heart", "Billy Ray Cyrus"],
+    ["After the Fire", ""],
+    ["Angels", "Robbie Williams"],
+    ["Another Brick in the Wall", "Pink Floyd"],
+    ["Atemlos", "Helene Fischer"],
+    ["Bad Moon Rising", "Creedence Clearwater Revival"],
+    ["Baila Morena", "Zucchero"],
+    ["Bella Napoli", "Roy Bianco & die Abbrunzati Boys"],
+    ["Bobfahrer-Lied", "Troglauer / Willy Michl"],
+    ["Brenna tuads guad", "Hubert von Goisern"],
+    ["Buona Sera Signorina", "Louis Prima"],
+    ["Can't Buy Me Love", "The Beatles"],
+    ["Charmaine", "Mantovani"],
+    ["Chiant Wein", "Karel Gott"],
+    ["Cocaine", "J.J. Cale"],
+    ["Cordula Grün", "Josh"],
+    ["Country Roads", "John Denver"],
+    ["D.I.S.C.O.", "Ottawan"],
+    ["Dance the Night Away", "The Mavericks"],
+    ["Dancin' Cowboys", "The Bellamy Brothers"],
+    ["Dem Land Tirol die Treue", ""],
+    ["Drivin' My Life Away", "Eddie Rabbitt"],
+    ["Ein Stern, der deinen Namen trägt", "DJ Ötzi & Nick P."],
+    ["Eine neue Liebe ist wie ein neues Leben", "J. Marcus"],
+    ["Engel", "Rammstein"],
+    ["Expresso & Tschianti", "Josh"],
+    ["Fürstenfeld", "STS"],
+    ["Games People Play", "Inner Circle"],
+    ["Get It On", "T. Rex"],
+    ["Gimme All Your Lovin'", "ZZ Top"],
+    ["Gimme Hope Jo'Anna", "Eddy Grant"],
+    ["Gö Du bleibst heut Nacht bei mir", "STS"],
+    ["Griechischer Wein", "Udo Jürgens"],
+    ["Haberfeldtreiber", "Troglauer Buam"],
+    ["Hallo Klaus", "Nickerbocker & Biene"],
+    ["Ham kummst", "Seiler & Speer"],
+    ["Hands Up", "Ottawan"],
+    ["Hang On Sloopy", "McCoys"],
+    ["Hey Jude", "The Beatles"],
+    ["Highway to Hell", "AC/DC"],
+    ["Himbeereis zum Frühstück", "Almklausi"],
+    ["Hit the Road Jack", "Ray Charles"],
+    ["Honky Tonk Woman", "Rolling Stones"],
+    ["Hört die Geschichte", "Junge aus Via Gluck"],
+    ["Hulapalu", "Andreas Gabalier"],
+    ["I Can't Get No Satisfaction", "Rolling Stones"],
+    ["I Feel Fine", "The Beatles"],
+    ["I Feel Good", "James Brown"],
+    ["I sing a Liad für di", "Andreas Gabalier"],
+    ["I Will Survive", "Gloria Gaynor"],
+    ["I'm Walking", "Fats Domino"],
+    ["If I Said You Have a Beautiful Body", "Bellamy Brothers"],
+    ["If I Was a…", "Midge Ure"],
+    ["Irgendwann bleib i dann dort", "STS"],
+    ["Is This the Way to Amarillo", "Tony Christie"],
+    ["It Never Rains in Southern California", "Albert Hammond"],
+    ["It's a Real Good Feeling", "Peter Kent"],
+    ["Jingle Bell Rock", ""],
+    ["Johnny B. Goode", "Willy Michl"],
+    ["King of the Road", "Roger Miller"],
+    ["Kufsteiner Lied – die Perle Tirols", ""],
+    ["Kung Fu Fighting", "Carl Douglas"],
+    ["La Bamba", "Ritchie Valens"],
+    ["Last Date", "Floyd Cramer"],
+    ["Last Waltz", "Engelbert Humperdinck"],
+    ["Lay Down Sally", "Eric Clapton"],
+    ["Layla", "DJ Robin Schürze"],
+    ["Let Your Love Flow", "Bellamy Brothers"],
+    ["Live is Life", "Opus"],
+    ["Live It Up", "Mental As Anything"],
+    ["Long Cool Woman", "The Hollies"],
+    ["Love Is in the Air", "John Paul Young"],
+    ["Major Tom", "Peter Schilling"],
+    ["Mamma Maria", "Ricchi e Poveri"],
+    ["Marry You", "Bruno Mars"],
+    ["Me and You and a Dog Named Boo", "Lobo"],
+    ["Merry Christmas Everyone", "Shakin' Stevens"],
+    ["Mull of Kintyre", "Paul McCartney & The Wings"],
+    ["Narcotic", "Liquido"],
+    ["On the Road Again", "Willie Nelson"],
+    ["Pepito", "Saxsolo"],
+    ["Perfect", "Ed Sheeran"],
+    ["Please Come Home for Christmas", "The Eagles"],
+    ["Pretty Woman", "Roy Orbison"],
+    ["Proud Mary", "Creedence Clearwater Revival"],
+    ["Que Sera Sera", "Doris Day"],
+    ["Rock Mi heut Nacht", "VoxxClub"],
+    ["Rock Your Baby", "George McCrae"],
+    ["Rock'n Roll Schuah", "Spider Murphy Gang"],
+    ["Rockin' All Over the World", "Status Quo"],
+    ["Rote Lippen soll man küssen", "Cliff Richard"],
+    ["Sag mir Quando, sag mir wann", ""],
+    ["Samba Pa Ti", "Santana"],
+    ["Schickeria", "Rainhard Fendrich"],
+    ["Schickeria", "Spider Murphy Gang"],
+    ["Seemann, lass das träumen", ""],
+    ["She Loves You", "The Beatles"],
+    ["Shoop Shoop Song", "Cher"],
+    ["Should I Stay or Should I Go", "The Clash"],
+    ["Simply the Best", "Tina Turner"],
+    ["Skandal im Sperrbezirk", "Spider Murphy Gang"],
+    ["Smoke on the Water", "Deep Purple"],
+    ["Sommer in der Stadt", "Spider Murphy Gang"],
+    ["Song for Guy", "Elton John"],
+    ["Stand by Me", "Ben E. King"],
+    ["Stumblin' In", "Chris Norman & Suzie Quatro"],
+    ["Summer of 69", "Bryan Adams"],
+    ["Sweet Caroline", "DJ Ötzi"],
+    ["Sweet Home Chicago", "The Blues Brothers"],
+    ["T.N.T.", "AC/DC"],
+    ["Tequila", "The Champs"],
+    ["The Last Time", "Rolling Stones"],
+    ["The Lion Sleeps Tonight", "Tight Fit"],
+    ["Time Is Tight", ""],
+    ["Trompeten Echo", ""],
+    ["Tulpen aus Amsterdam", ""],
+    ["Unchained Melody", "Righteous Brothers"],
+    ["Vogel der Nacht", "Stephan Remmler"],
+    ["Wackelkontakt", "Oimara"],
+    ["Wahnsinn", "Wolfgang Petry"],
+    ["Walking on Sunshine", "Katrina & The Waves"],
+    ["Warum hast du nicht nein gesagt", "Roland Kaiser"],
+    ["We Are the Champions", "Queen"],
+    ["We Will Rock You", "Queen"],
+    ["Weil i do mog", "Relax"],
+    ["Westerland", "Die Ärzte"],
+    ["Weus'd a Herz hast wia a Bergwerk", "Rainhard Fendrich"],
+    ["What's Up", "4 Non Blondes"],
+    ["When You're in Love with a Beautiful Woman", "Dr. Hook"],
+    ["Wilds Wasser", "Die Seer"],
+    ["Wish You Were Here", "Pink Floyd"],
+    ["Wonderful Tonight", "Eric Clapton"],
+    ["Yakety-Sax", "Boots Randolph"],
+    ["You Can Leave Your Hat On", "Joe Cocker"],
+    ["You Got It", "Roy Orbison"],
+  ];
+
+  (function () {
+    const list = document.getElementById('songs-list');
+    const countEl = document.getElementById('programm-count');
+    const searchEl = document.getElementById('programm-search');
+    const noResults = document.getElementById('no-results');
+
+    songData.forEach(([title, artist]) => {
+      const li = document.createElement('li');
+      li.className = 'song-item';
+      li.dataset.search = (title + ' ' + artist).toLowerCase();
+      li.innerHTML = artist
+        ? `<span class="song-item-title">${title}</span><span class="song-item-sep">●</span><span class="song-item-artist">${artist}</span>`
+        : `<span class="song-item-title">${title}</span>`;
+      list.appendChild(li);
+    });
+
+    countEl.textContent = songData.length + ' Songs';
+
+    searchEl.addEventListener('input', () => {
+      const q = searchEl.value.toLowerCase();
+      let visible = 0;
+      list.querySelectorAll('.song-item').forEach(item => {
+        const match = !q || item.dataset.search.includes(q);
+        item.classList.toggle('hidden', !match);
+        if (match) visible++;
+      });
+      countEl.textContent = visible + ' Songs';
+      noResults.classList.toggle('visible', visible === 0);
+    });
+  })();
 
   /* ─── Band section parallax ──────────────────────────────────── */
   const bandSection = document.getElementById('band');
