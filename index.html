@@ -2030,10 +2030,14 @@
   });
 
   /* ─── Booking Form ──────────────────────────────────────────── */
-  document.getElementById('form-submit-btn').addEventListener('click', () => {
-    const fname = document.getElementById('fname').value.trim();
-    const email = document.getElementById('email').value.trim();
-    const date  = document.getElementById('event-date').value;
+  document.getElementById('form-submit-btn').addEventListener('click', async () => {
+    const fname         = document.getElementById('fname').value.trim();
+    const lname         = document.getElementById('lname').value.trim();
+    const email         = document.getElementById('email').value.trim();
+    const phone         = document.getElementById('phone').value.trim();
+    const date          = document.getElementById('event-date').value;
+    const location      = document.getElementById('location').value.trim();
+    const message       = document.getElementById('message').value.trim();
     const activeOccasion = document.querySelector('.occasion-btn.active');
 
     if (!fname || !email || !date || !activeOccasion) {
@@ -2041,8 +2045,40 @@
       return;
     }
 
-    document.getElementById('booking-form-content').style.display = 'none';
-    document.getElementById('form-success').classList.add('shown');
+    const btn = document.getElementById('form-submit-btn');
+    btn.textContent = 'Wird gesendet …';
+    btn.disabled = true;
+
+    try {
+      const res = await fetch('https://formspree.io/f/meewwbpv', {
+        method: 'POST',
+        headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          Vorname: fname,
+          Nachname: lname,
+          Email: email,
+          Telefon: phone,
+          'Datum des Events': date,
+          Veranstaltungsort: location,
+          'Art des Events': activeOccasion.dataset.val,
+          Nachricht: message
+        })
+      });
+
+      if (res.ok) {
+        document.getElementById('booking-form-content').style.display = 'none';
+        document.getElementById('form-success').classList.add('shown');
+      } else {
+        const data = await res.json();
+        showToast('⚠  ' + (data.error || 'Fehler beim Senden. Bitte versuche es erneut.'));
+        btn.textContent = 'Anfrage Absenden →';
+        btn.disabled = false;
+      }
+    } catch {
+      showToast('⚠  Netzwerkfehler. Bitte überprüfe deine Verbindung.');
+      btn.textContent = 'Anfrage Absenden →';
+      btn.disabled = false;
+    }
   });
 
   /* ─── Scroll Reveal ─────────────────────────────────────────── */
