@@ -599,65 +599,87 @@
       position: relative; z-index: 2;
     }
 
-    .songs-grid {
+    /* ─── Media Gallery ─────────────────────────────────────────── */
+    .media-gallery {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      grid-template-columns: 1fr 1fr;
       gap: 1.5rem;
       position: relative; z-index: 2;
     }
 
-    .song-card {
+    .media-card {
       background: rgba(255,255,255,0.04);
       border: 1px solid rgba(255,255,255,0.08);
-      padding: 1.8rem;
-      position: relative;
       overflow: hidden;
-      transition: border-color 0.3s, transform 0.3s, background 0.3s;
-      cursor: pointer;
+      transition: border-color 0.3s, transform 0.3s;
     }
-    .song-card:hover {
-      border-color: rgba(246,225,50,0.4);
-      background: rgba(246,225,50,0.04);
-      transform: translateY(-4px);
-    }
-    .song-card.featured {
-      grid-column: span 2;
-      background: rgba(246,225,50,0.08);
-      border-color: rgba(246,225,50,0.25);
+    .media-card:hover {
+      border-color: rgba(246,225,50,0.3);
     }
 
-    .song-number {
+    .media-card--video {
+      grid-column: 1 / -1;
+    }
+
+    .mc-header {
+      padding: 1.2rem 1.8rem 0.8rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .mc-tag {
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--yellow);
+      border: 1px solid rgba(246,225,50,0.35);
+      padding: 0.25em 0.8em;
+    }
+    .mc-title {
       font-family: var(--font-display);
-      font-size: 4rem;
-      color: rgba(255,255,255,0.06);
-      position: absolute;
-      top: 0.5rem; right: 1rem;
-      line-height: 1;
+      font-size: 1.05rem;
+      color: var(--white);
+      letter-spacing: 0.06em;
     }
 
-    .song-genre {
-      font-size: 0.65rem;
+    .gallery-video {
+      display: block;
+      width: 100%;
+      max-height: 520px;
+      object-fit: contain;
+      background: #000;
+    }
+
+    .media-card--audio {
+      padding: 1.8rem;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    .track-number {
+      font-family: var(--font-display);
+      font-size: 4.5rem;
+      color: rgba(255,255,255,0.05);
+      line-height: 1;
+      position: absolute;
+      top: 0.6rem; right: 1.2rem;
+    }
+    .track-genre {
+      font-size: 0.62rem;
       font-weight: 700;
       letter-spacing: 0.18em;
       text-transform: uppercase;
       color: var(--gray2);
-      margin-bottom: 0.8rem;
-    }
-
-    .song-title {
-      font-family: var(--font-display);
-      font-size: clamp(1.5rem, 3vw, 2.4rem);
-      color: var(--white);
-      letter-spacing: 0.04em;
       margin-bottom: 0.6rem;
     }
-    .song-card.featured .song-title { color: var(--yellow); }
-
-    .song-desc {
-      font-size: 0.85rem;
-      color: var(--gray2);
-      line-height: 1.6;
-      margin-bottom: 1.2rem;
+    .track-title {
+      font-family: var(--font-display);
+      font-size: clamp(1.6rem, 3vw, 2.2rem);
+      color: var(--yellow);
+      letter-spacing: 0.04em;
+      margin-bottom: 1rem;
     }
 
     /* Custom Audio Player */
@@ -1345,7 +1367,6 @@
     /* ─── Responsive ─────────────────────────────────────────────── */
     @media (max-width: 1100px) {
       .members-grid { grid-template-columns: repeat(3, 1fr); }
-      .song-card.featured { grid-column: span 1; }
     }
 
     @media (max-width: 900px) {
@@ -1378,6 +1399,7 @@
       .footer-top { grid-template-columns: 1fr; }
       .occasions-grid { grid-template-columns: 1fr 1fr; }
       .songs-list { grid-template-columns: 1fr; }
+      .media-gallery { grid-template-columns: 1fr; }
     }
 
     @media (max-width: 400px) {
@@ -1387,8 +1409,10 @@
 </head>
 <body>
 
-<!-- Audio Element -->
+<!-- Audio Elements -->
 <audio id="bg-audio" src="Hold on.mp3" loop preload="auto"></audio>
+<audio id="track1-audio" src="Hold on.mp3" preload="metadata"></audio>
+<audio id="track2-audio" src="Forever and ever.mp3" preload="metadata"></audio>
 
 <!-- ─── Intro Overlay ─────────────────────────────────────────── -->
 <div id="intro-overlay">
@@ -1538,75 +1562,71 @@
     </div>
     <p class="reveal" style="color:var(--gray2); max-width:300px; font-size:0.9rem; line-height:1.7;">
       Von eingängigen Pop-Hits bis zu unvergesslichen Balladen —
-      unser Repertoire umfasst über 200 Songs.
+      unser Repertoire umfasst über 130 Songs.
     </p>
   </div>
 
-  <div class="songs-grid">
-    <!-- Featured Song with Player -->
-    <div class="song-card featured reveal">
-      <span class="song-number">01</span>
-      <p class="song-genre">Featured Single</p>
-      <h3 class="song-title">Hold On</h3>
-      <p class="song-desc">
-        Unsere neueste Single — eine emotionale Reise mit kraftvollen Vocals,
-        pulsierendem Beat und einer Melodie, die sich in dein Herz brennt.
-      </p>
+  <div class="media-gallery">
+
+    <!-- Live Video -->
+    <div class="media-card media-card--video reveal">
+      <div class="mc-header">
+        <span class="mc-tag">Live Performance</span>
+        <span class="mc-title">Skyline-Musik auf der Bühne</span>
+      </div>
+      <video class="gallery-video" src="VID-20250721-WA0024.mp4" preload="metadata" playsinline controls></video>
+    </div>
+
+    <!-- Track 1: Hold On -->
+    <div class="media-card media-card--audio reveal reveal-delay-1">
+      <span class="track-number">01</span>
+      <span class="track-genre">Pop · Ballade</span>
+      <h3 class="track-title">Hold On</h3>
       <div class="audio-player">
         <div class="audio-top">
-          <button class="play-pause-btn" id="song-play-btn" aria-label="Abspielen">
-            <svg id="song-play-icon" width="18" height="18" viewBox="0 0 24 24" fill="#111118"><polygon points="6,3 20,12 6,21"/></svg>
+          <button class="play-pause-btn" id="track1-play-btn" aria-label="Abspielen">
+            <svg id="track1-play-icon" width="18" height="18" viewBox="0 0 24 24" fill="#111118"><polygon points="6,3 20,12 6,21"/></svg>
           </button>
-          <div class="waveform-bars" id="waveform">
+          <div class="waveform-bars" id="track1-waveform">
             <span style="height:40%"></span><span style="height:75%"></span>
             <span style="height:55%"></span><span style="height:90%"></span>
             <span style="height:65%"></span><span style="height:45%"></span>
             <span style="height:80%"></span><span style="height:60%"></span>
             <span style="height:95%"></span><span style="height:50%"></span>
           </div>
-          <span class="audio-time" id="audio-time">0:00</span>
+          <span class="audio-time" id="track1-time">0:00</span>
         </div>
-        <div class="progress-bar" id="progress-bar">
-          <div class="progress-fill" id="progress-fill"></div>
+        <div class="progress-bar" id="track1-progress-bar">
+          <div class="progress-fill" id="track1-progress-fill"></div>
         </div>
       </div>
     </div>
 
-    <!-- Other Songs -->
-    <div class="song-card reveal reveal-delay-1">
-      <span class="song-number">02</span>
-      <p class="song-genre">Ballade</p>
-      <h3 class="song-title">Nachtlichter</h3>
-      <p class="song-desc">Eine zarte Ballade über stille Momente und das Leuchten in dunklen Nächten.</p>
+    <!-- Track 2: Forever and Ever -->
+    <div class="media-card media-card--audio reveal reveal-delay-2">
+      <span class="track-number">02</span>
+      <span class="track-genre">Ballade</span>
+      <h3 class="track-title">Forever and Ever</h3>
+      <div class="audio-player">
+        <div class="audio-top">
+          <button class="play-pause-btn" id="track2-play-btn" aria-label="Abspielen">
+            <svg id="track2-play-icon" width="18" height="18" viewBox="0 0 24 24" fill="#111118"><polygon points="6,3 20,12 6,21"/></svg>
+          </button>
+          <div class="waveform-bars" id="track2-waveform">
+            <span style="height:55%"></span><span style="height:80%"></span>
+            <span style="height:40%"></span><span style="height:70%"></span>
+            <span style="height:90%"></span><span style="height:50%"></span>
+            <span style="height:65%"></span><span style="height:75%"></span>
+            <span style="height:45%"></span><span style="height:85%"></span>
+          </div>
+          <span class="audio-time" id="track2-time">0:00</span>
+        </div>
+        <div class="progress-bar" id="track2-progress-bar">
+          <div class="progress-fill" id="track2-progress-fill"></div>
+        </div>
+      </div>
     </div>
 
-    <div class="song-card reveal reveal-delay-2">
-      <span class="song-number">03</span>
-      <p class="song-genre">Uptempo Pop</p>
-      <h3 class="song-title">Freier Fall</h3>
-      <p class="song-desc">Treibende Gitarren, mitreißender Beat — der perfekte Song für die Tanzfläche.</p>
-    </div>
-
-    <div class="song-card reveal reveal-delay-3">
-      <span class="song-number">04</span>
-      <p class="song-genre">Indie Rock</p>
-      <h3 class="song-title">Skyline Drive</h3>
-      <p class="song-desc">Unser Namensträger — ein kraftvolles Gitarrenriff trifft auf cinematische Weite.</p>
-    </div>
-
-    <div class="song-card reveal reveal-delay-4">
-      <span class="song-number">05</span>
-      <p class="song-genre">Soul / R&amp;B</p>
-      <h3 class="song-title">Goldener Moment</h3>
-      <p class="song-desc">Warme Grooves, samtene Vocals und ein Chorus der sich anfühlt wie ein Umarmung.</p>
-    </div>
-
-    <div class="song-card reveal reveal-delay-5">
-      <span class="song-number">06</span>
-      <p class="song-genre">Hochzeitshit</p>
-      <h3 class="song-title">Für immer hier</h3>
-      <p class="song-desc">Speziell für große Momente — unser beliebtester Song bei Hochzeiten und Feiern.</p>
-    </div>
   </div>
 </section>
 
@@ -1692,7 +1712,7 @@
       <div class="member-body">
         <p class="member-role">Gesang · Gitarre · E-Bass · Trompete · Bariton</p>
         <h3 class="member-name">Andi</h3>
-        <p class="member-bio">Mit 5 Jahren entdeckte er seine Leidenschaft für Musik. Stationen bei Phoenix, Six Pac, Chris Wittl &amp; Friends und d'Sandler sowie 3 Jahre Hauptsänger beim Symphonischen Orchester Parsberg (SBOP). Seine Gänsehautstimme macht jeden Auftritt unvergesslich.</p>
+        <p class="member-bio">Schon mit 5 Jahren war klar, wohin die Reise geht: Andi singt, bevor er spricht – zumindest fühlt es sich so an. Was mit kindlicher Begeisterung begann, wurde mit 13 zur ernsthaften Leidenschaft: Gitarre, Bass, Trompete, Bariton – alles selbst beigebracht, alles mit Hingabe. Bands wie Phoenix, Six Pac oder d'Sandler haben seinen Stil geprägt, drei Herbstkonzerte als Hauptsänger beim Symphonischen Orchester Parsberg seine Vielseitigkeit bewiesen. Auf der Bühne passiert dann das, wofür es kein besseres Wort gibt: Gänsehaut.</p>
       </div>
     </div>
 
@@ -1966,54 +1986,60 @@
     isPlaying ? stopAudio() : startAudio();
   });
 
-  /* ─── Song Audio Player ─────────────────────────────────────── */
-  const songPlayBtn = document.getElementById('song-play-btn');
-  const songPlayIcon = document.getElementById('song-play-icon');
-  const waveform = document.getElementById('waveform');
-  const progressFill = document.getElementById('progress-fill');
-  const progressBar = document.getElementById('progress-bar');
-  const audioTime = document.getElementById('audio-time');
-
+  /* ─── Gallery Players ───────────────────────────────────────── */
   function formatTime(s) {
     const m = Math.floor(s / 60);
     const sec = Math.floor(s % 60);
     return `${m}:${sec.toString().padStart(2, '0')}`;
   }
 
-  songPlayBtn.addEventListener('click', () => {
-    if (isPlaying) {
-      stopAudio();
-      waveform.classList.remove('playing');
-      songPlayIcon.innerHTML = '<polygon points="6,3 20,12 6,21"/>';
-    } else {
-      startAudio();
-      waveform.classList.add('playing');
-      songPlayIcon.innerHTML = '<rect x="5" y="4" width="4" height="16" rx="1"/><rect x="15" y="4" width="4" height="16" rx="1"/>';
-    }
-  });
+  const galleryTracks = [
+    document.getElementById('track1-audio'),
+    document.getElementById('track2-audio')
+  ];
 
-  audio.addEventListener('timeupdate', () => {
-    if (audio.duration) {
-      const pct = (audio.currentTime / audio.duration) * 100;
-      progressFill.style.width = pct + '%';
-      audioTime.textContent = formatTime(audio.currentTime);
-    }
-  });
+  function initTrackPlayer(trackAudio, playBtnId, playIconId, waveformId, progressFillId, progressBarId, timeId) {
+    const playBtn = document.getElementById(playBtnId);
+    const playIcon = document.getElementById(playIconId);
+    const waveformEl = document.getElementById(waveformId);
+    const progressFillEl = document.getElementById(progressFillId);
+    const progressBarEl = document.getElementById(progressBarId);
+    const timeEl = document.getElementById(timeId);
 
-  progressBar.addEventListener('click', (e) => {
-    const rect = progressBar.getBoundingClientRect();
-    const ratio = (e.clientX - rect.left) / rect.width;
-    if (audio.duration) audio.currentTime = ratio * audio.duration;
-  });
+    playBtn.addEventListener('click', () => {
+      if (trackAudio.paused) {
+        stopAudio();
+        galleryTracks.forEach(t => { if (t !== trackAudio) t.pause(); });
+        trackAudio.play().catch(() => {});
+      } else {
+        trackAudio.pause();
+      }
+    });
 
-  audio.addEventListener('play', () => {
-    waveform.classList.add('playing');
-    songPlayIcon.innerHTML = '<rect x="5" y="4" width="4" height="16" rx="1"/><rect x="15" y="4" width="4" height="16" rx="1"/>';
-  });
-  audio.addEventListener('pause', () => {
-    waveform.classList.remove('playing');
-    songPlayIcon.innerHTML = '<polygon points="6,3 20,12 6,21"/>';
-  });
+    trackAudio.addEventListener('timeupdate', () => {
+      if (trackAudio.duration) {
+        progressFillEl.style.width = (trackAudio.currentTime / trackAudio.duration * 100) + '%';
+        timeEl.textContent = formatTime(trackAudio.currentTime);
+      }
+    });
+
+    progressBarEl.addEventListener('click', e => {
+      const rect = progressBarEl.getBoundingClientRect();
+      if (trackAudio.duration) trackAudio.currentTime = ((e.clientX - rect.left) / rect.width) * trackAudio.duration;
+    });
+
+    trackAudio.addEventListener('play', () => {
+      waveformEl.classList.add('playing');
+      playIcon.innerHTML = '<rect x="5" y="4" width="4" height="16" rx="1"/><rect x="15" y="4" width="4" height="16" rx="1"/>';
+    });
+    trackAudio.addEventListener('pause', () => {
+      waveformEl.classList.remove('playing');
+      playIcon.innerHTML = '<polygon points="6,3 20,12 6,21"/>';
+    });
+  }
+
+  initTrackPlayer(galleryTracks[0], 'track1-play-btn', 'track1-play-icon', 'track1-waveform', 'track1-progress-fill', 'track1-progress-bar', 'track1-time');
+  initTrackPlayer(galleryTracks[1], 'track2-play-btn', 'track2-play-icon', 'track2-waveform', 'track2-progress-fill', 'track2-progress-bar', 'track2-time');
 
   /* ─── Navbar scroll ─────────────────────────────────────────── */
   const navbar = document.getElementById('navbar');
