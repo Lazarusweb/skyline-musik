@@ -182,6 +182,9 @@
     }
 
     /* Mobile nav open state */
+    nav.open {
+      background: var(--cream);
+    }
     nav.open .nav-links {
       display: flex !important;
       flex-direction: column;
@@ -200,6 +203,7 @@
     nav.open .hamburger span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
     nav.open .hamburger span:nth-child(2) { opacity: 0; transform: scaleX(0); }
     nav.open .hamburger span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+    body.menu-open { overflow: hidden; }
 
     /* ─── Hero ───────────────────────────────────────────────────── */
     #hero {
@@ -2073,10 +2077,14 @@
   /* ─── Hamburger menu ─────────────────────────────────────────── */
   const hamburger = document.getElementById('hamburger');
   hamburger.addEventListener('click', () => {
-    navbar.classList.toggle('open');
+    const isOpen = navbar.classList.toggle('open');
+    document.body.classList.toggle('menu-open', isOpen);
   });
   document.querySelectorAll('.nav-links a').forEach(link => {
-    link.addEventListener('click', () => navbar.classList.remove('open'));
+    link.addEventListener('click', () => {
+      navbar.classList.remove('open');
+      document.body.classList.remove('menu-open');
+    });
   });
 
   /* ─── Occasion buttons ──────────────────────────────────────── */
