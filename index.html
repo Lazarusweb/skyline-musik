@@ -174,11 +174,32 @@
     .hamburger {
       display: none; flex-direction: column; gap: 5px;
       cursor: pointer; background: none; border: none; padding: 4px;
+      position: relative; z-index: 1001;
     }
     .hamburger span {
       display: block; width: 26px; height: 2px; background: var(--ink);
-      transition: transform 0.3s;
+      transition: transform 0.3s, opacity 0.3s;
     }
+
+    /* Mobile nav open state */
+    nav.open .nav-links {
+      display: flex !important;
+      flex-direction: column;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: var(--cream);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      gap: 2.5rem;
+    }
+    nav.open .nav-links a {
+      font-size: 1.2rem;
+      letter-spacing: 0.15em;
+    }
+    nav.open .hamburger span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    nav.open .hamburger span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+    nav.open .hamburger span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
     /* ─── Hero ───────────────────────────────────────────────────── */
     #hero {
@@ -2048,6 +2069,15 @@
   window.addEventListener('scroll', () => {
     navbar.classList.toggle('scrolled', window.scrollY > 40);
   }, { passive: true });
+
+  /* ─── Hamburger menu ─────────────────────────────────────────── */
+  const hamburger = document.getElementById('hamburger');
+  hamburger.addEventListener('click', () => {
+    navbar.classList.toggle('open');
+  });
+  document.querySelectorAll('.nav-links a').forEach(link => {
+    link.addEventListener('click', () => navbar.classList.remove('open'));
+  });
 
   /* ─── Occasion buttons ──────────────────────────────────────── */
   document.querySelectorAll('.occasion-btn').forEach(btn => {
