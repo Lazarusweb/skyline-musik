@@ -169,6 +169,25 @@
     .nav-book:hover { background: var(--orange) !important; color: var(--white) !important; }
     .nav-book::after { display: none !important; }
 
+    .nav-actions {
+      display: flex; align-items: center; gap: 0.9rem;
+    }
+
+    .nav-audio-toggle {
+      display: none;
+      width: 36px; height: 36px;
+      background: var(--ink);
+      color: var(--yellow);
+      border: none; border-radius: 50%;
+      align-items: center; justify-content: center;
+      cursor: pointer;
+      position: relative; z-index: 1001;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .nav-audio-toggle:active { transform: scale(0.92); }
+    .nav-audio-toggle svg { margin-left: 2px; }
+    .nav-audio-toggle.playing svg { margin-left: 0; }
+
     .hamburger {
       display: none; flex-direction: column; gap: 5px;
       cursor: pointer; background: none; border: none; padding: 4px;
@@ -1413,6 +1432,7 @@
 
       nav .nav-links { display: none; }
       .hamburger { display: flex; }
+      .nav-audio-toggle { display: flex; }
     }
 
     @media (max-width: 600px) {
@@ -1467,9 +1487,14 @@
     <li><a href="#programm">Programm</a></li>
     <li><a href="#buchen" class="nav-book">Jetzt Buchen</a></li>
   </ul>
-  <button class="hamburger" id="hamburger" aria-label="Menü öffnen">
-    <span></span><span></span><span></span>
-  </button>
+  <div class="nav-actions">
+    <button class="nav-audio-toggle" id="nav-audio-toggle" aria-label="Musik abspielen">
+      <svg id="nav-play-icon" width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><polygon points="6,3 20,12 6,21"/></svg>
+    </button>
+    <button class="hamburger" id="hamburger" aria-label="Menü öffnen">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
 </nav>
 
 <!-- ─── Hero ─────────────────────────────────────────────────── -->
@@ -1980,6 +2005,8 @@
   const vinyl = document.getElementById('vinyl-record');
   const vinylPlayBtn = document.getElementById('vinyl-play');
   const playIcon = document.getElementById('play-icon');
+  const navAudioToggle = document.getElementById('nav-audio-toggle');
+  const navPlayIcon = document.getElementById('nav-play-icon');
 
   let isPlaying = false;
 
@@ -1989,11 +2016,17 @@
     setTimeout(() => toast.classList.remove('show'), 3000);
   }
 
+  const pauseIconMarkup = '<rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/>';
+  const playIconMarkup = '<polygon points="6,3 20,12 6,21"/>';
+
   function startAudio() {
     audio.play().catch(() => {});
     isPlaying = true;
     vinyl.classList.add('playing');
-    playIcon.innerHTML = '<rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/>';
+    playIcon.innerHTML = pauseIconMarkup;
+    navPlayIcon.innerHTML = pauseIconMarkup;
+    navAudioToggle.classList.add('playing');
+    navAudioToggle.setAttribute('aria-label', 'Musik pausieren');
     showToast('♪  Musik spielt jetzt');
   }
 
@@ -2001,7 +2034,10 @@
     audio.pause();
     isPlaying = false;
     vinyl.classList.remove('playing');
-    playIcon.innerHTML = '<polygon points="6,3 20,12 6,21"/>';
+    playIcon.innerHTML = playIconMarkup;
+    navPlayIcon.innerHTML = playIconMarkup;
+    navAudioToggle.classList.remove('playing');
+    navAudioToggle.setAttribute('aria-label', 'Musik abspielen');
   }
 
   enterBtn.addEventListener('click', () => {
@@ -2011,6 +2047,10 @@
   });
 
   vinylPlayBtn.addEventListener('click', () => {
+    isPlaying ? stopAudio() : startAudio();
+  });
+
+  navAudioToggle.addEventListener('click', () => {
     isPlaying ? stopAudio() : startAudio();
   });
 
